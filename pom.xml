@@ -158,14 +158,14 @@
                                            windowtitle="${project.name}"
                                            doctitle="${project.name}"
                                 >
-                                    <link packages="java.,org.xml.,javax.,org.xml."
-                                          href="http://download.oracle.com/javase/6/docs/api" />
+                                    <link packages="java."
+                                          href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base" />
                                     <link packages="org.apache.tools.ant."
-                                          href="http://evgeny-goldin.org/javadoc/ant/api" />
+                                          href="https://javadoc.io/doc/org.apache.ant/ant/latest" />
                                     <link packages="org.junit.,junit.framework."
-                                          href="http://kentbeck.github.com/junit/javadoc/latest" />
+                                          href="https://junit.org/junit5/docs/current/api" />
                                     <link packages="groovy.,org.apache.groovy."
-                                          href="http://groovy.apache.org/api/" />
+                                          href="https://docs.groovy-lang.org/latest/html/gapi" />
                                 </groovydoc>
                                 <property name="docFile" value="${project.build.directory}/${project.artifactId}-${project.version}-groovydoc.jar"/>
                                 <jar destfile="${docFile}"
