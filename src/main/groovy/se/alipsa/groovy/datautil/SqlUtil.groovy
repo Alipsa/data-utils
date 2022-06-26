@@ -289,13 +289,13 @@ class SqlUtil {
 
         try {
             return (Driver)caller.getClassLoader().loadClass(driverClassName).getDeclaredConstructor().newInstance();
-        } catch (ClassNotFoundException ignored) {
+        } catch (ClassNotFoundException | NullPointerException ignored) {
             try {
                 return (Driver) Thread.currentThread().getContextClassLoader().loadClass(driverClassName).getDeclaredConstructor().newInstance()
-            } catch(ClassNotFoundException e2) {
+            } catch(ClassNotFoundException | NullPointerException e2) {
                 try {
                     return (Driver)SqlUtil.class.getClassLoader().loadClass(driverClassName).getDeclaredConstructor().newInstance()
-                } catch (ClassNotFoundException e3) {
+                } catch (ClassNotFoundException | NullPointerException e3) {
                     return (Driver)Class.forName(driverClassName).getDeclaredConstructor().newInstance();
                 }
             }
