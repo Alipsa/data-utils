@@ -16,8 +16,9 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.apache.groovy:groovy:4.0.3'
-    implementation 'org.apache.groovy:groovy-sql:4.0.3'
+    def groovyVersion = "[4.0.3, )"
+    implementation "org.apache.groovy:groovy:${groovyVersion}"
+    implementation "org.apache.groovy:groovy-sql:${groovyVersion}"
     testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
     testImplementation 'com.h2database:h2:2.1.214'
 }
