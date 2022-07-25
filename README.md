@@ -23,3 +23,31 @@ SqlUtil.withInstance("jdbc:postgresql://localhost:5432/mydb", "dbUser", "dbPassw
     }
 }
 ```
+See [test.alipsa.groovy.datautil.SqlUtilTest](https://github.com/perNyfelt/data-utils/blob/master/src/test/groovy/test/alipsa/groovy/datautil/SqlUtilTest.groovy) 
+for more examples!
+
+## Using the dependency
+data-utils is available from maven central
+
+Groovy:
+```groovy
+implementation "se.alipsa.groovy:data-utils:1.0.1"
+```
+
+Maven:
+```xml
+<dependency>
+    <groupId>se.alipsa.groovy</groupId>
+    <artifactId>data-utils</artifactId>
+    <version>1.0.1</version>
+</dependency>
+```
+
+## Version history
+
+### 1.0.1, 2022-07-25
+- Upgrade to Groovy 4.0.4
+- Build script fixes
+
+### 1.0.0, 2022-07-15
+- initial release
