@@ -16,7 +16,16 @@ dependencies {
     def tablesawVersion = "[0.43.1, )"
     implementation "org.apache.groovy:groovy:${groovyVersion}"
     implementation "org.apache.groovy:groovy-sql:${groovyVersion}"
-    implementation "tech.tablesaw:tablesaw-core:${tablesawVersion}"
+    implementation("tech.tablesaw:tablesaw-core:${tablesawVersion}") {
+        constraints {
+            implementation "io.github.classgraph:classgraph:4.8.149"
+            because "Fix CWE-611: Improper Restriction of XML External Entity Reference ('XXE')"
+        }
+        constraints {
+            implementation "com.google.guava:guava:31.1-jre"
+            because "Fix CWE-379: Creation of Temporary File in Directory with Incorrect Permissions"
+        }
+    }
     testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
     testImplementation 'com.h2database:h2:2.1.214'
     testImplementation "org.slf4j:slf4j-simple:1.7.36"
