@@ -8,7 +8,7 @@ However, with some Reflection magic it is possible to do without this. This is w
 Here is an example:
 
 ```groovy
-@Grab('se.alipsa.groovy:data-utils:1.0.0')
+@Grab('se.alipsa.groovy:data-utils:1.0.2')
 @Grab('org.postgresql:postgresql:42.4.0')
 
 import se.alipsa.groovy.datautil.SqlUtil
@@ -31,7 +31,7 @@ data-utils is available from maven central
 
 Groovy:
 ```groovy
-implementation "se.alipsa.groovy:data-utils:1.0.1"
+implementation "se.alipsa.groovy:data-utils:1.0.2"
 ```
 
 Maven:
@@ -39,11 +39,14 @@ Maven:
 <dependency>
     <groupId>se.alipsa.groovy</groupId>
     <artifactId>data-utils</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
 </dependency>
 ```
 
 ## Version history
+
+### 1.0.2, 2022-08-17
+- Add TableUtil with support for frequency tables
 
 ### 1.0.1, 2022-07-25
 - Upgrade to Groovy 4.0.4

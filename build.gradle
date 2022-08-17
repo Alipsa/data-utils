@@ -13,14 +13,17 @@ repositories {
 
 dependencies {
     def groovyVersion = "[4.0.4, )"
+    def tablesawVersion = "[0.43.1, )"
     implementation "org.apache.groovy:groovy:${groovyVersion}"
     implementation "org.apache.groovy:groovy-sql:${groovyVersion}"
+    implementation "tech.tablesaw:tablesaw-core:${tablesawVersion}"
     testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
     testImplementation 'com.h2database:h2:2.1.214'
+    testImplementation "org.slf4j:slf4j-simple:1.7.36"
 }
 
 group = 'se.alipsa.groovy'
-version = '1.0.1'
+version = '1.0.2'
 description = 'Java FX GUI for Groovy based data science analysis and applications'
 java.sourceCompatibility = JavaVersion.VERSION_17
 
