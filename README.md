@@ -50,6 +50,7 @@ Maven:
 ## Version history
 
 ### 1.0.3, in development
+- upgrade transient dependencies with cve issues
 
 ### 1.0.2, 2022-08-17
 - Add TableUtil with support for frequency tables
