@@ -23,7 +23,7 @@ dependencies {
 }
 
 group = 'se.alipsa.groovy'
-version = '1.0.2'
+version = '1.0.3-SNAPSHOT'
 description = 'Java FX GUI for Groovy based data science analysis and applications'
 java.sourceCompatibility = JavaVersion.VERSION_17
 
