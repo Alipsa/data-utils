@@ -16,10 +16,12 @@ import tech.tablesaw.selection.BitmapBackedSelection;
 import tech.tablesaw.selection.Selection;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.util.*;
 import java.util.function.DoubleSupplier;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -28,53 +30,6 @@ public class BigDecimalColumn extends NumberColumn<BigDecimalColumn, BigDecimal>
     implements NumberFillers<BigDecimalColumn> {
 
   protected final ObjectArrayList<BigDecimal> data;
-
-
-  protected BigDecimalColumn(String name, ObjectArrayList<BigDecimal> data) {
-    super(BigDecimalColumnType.instance(), name, BigDecimalColumnType.DEFAULT_PARSER);
-    setPrintFormatter(BigDecimalColumnFormatter.floatingPointDefault());
-    this.data = data;
-  }
-
-  /** {@inheritDoc} */
-  @Override
-  public String getString(int row) {
-    final BigDecimal value = getBigDecimal(row);
-    return String.valueOf(getPrintFormatter().format(value));
-  }
-
-  /** {@inheritDoc} */
-  @Override
-  public int size() {
-    return data.size();
-  }
-
-  /** {@inheritDoc} */
-  @Override
-  public void clear() {
-    data.clear();
-  }
-
-  /** {@inheritDoc} */
-  @Override
-  public BigDecimalColumn setMissing(int index) {
-    set(index, BigDecimalColumnType.missingValueIndicator());
-    return this;
-  }
-
-  protected BigDecimalColumn(String name) {
-    super(BigDecimalColumnType.instance(), name, BigDecimalColumnType.DEFAULT_PARSER);
-    setPrintFormatter(BigDecimalColumnFormatter.floatingPointDefault());
-    this.data = new ObjectArrayList<>(DEFAULT_ARRAY_SIZE);
-  }
-
-  public static BigDecimalColumn create(String name, BigDecimal... arr) {
-    return new BigDecimalColumn(name, new ObjectArrayList<>(arr));
-  }
-
-  public static BigDecimalColumn create(String name) {
-    return new BigDecimalColumn(name);
-  }
 
   public static BigDecimalColumn create(String name, double... arr) {
     final BigDecimal[] values = new BigDecimal[arr.length];
@@ -138,6 +93,26 @@ public class BigDecimalColumn extends NumberColumn<BigDecimalColumn, BigDecimal>
     return new BigDecimalColumn(name, list);
   }
 
+  protected BigDecimalColumn(String name, ObjectArrayList<BigDecimal> data) {
+    super(BigDecimalColumnType.instance(), name, BigDecimalColumnType.DEFAULT_PARSER);
+    setPrintFormatter(BigDecimalColumnFormatter.floatingPointDefault());
+    this.data = data;
+  }
+
+  protected BigDecimalColumn(String name) {
+    super(BigDecimalColumnType.instance(), name, BigDecimalColumnType.DEFAULT_PARSER);
+    setPrintFormatter(BigDecimalColumnFormatter.floatingPointDefault());
+    this.data = new ObjectArrayList<>(DEFAULT_ARRAY_SIZE);
+  }
+
+  public static BigDecimalColumn create(String name, BigDecimal... arr) {
+    return new BigDecimalColumn(name, new ObjectArrayList<>(arr));
+  }
+
+  public static BigDecimalColumn create(String name) {
+    return new BigDecimalColumn(name);
+  }
+
   /** {@inheritDoc} */
   @Override
   public BigDecimalColumn createCol(String name, int initialSize) {
@@ -148,6 +123,32 @@ public class BigDecimalColumn extends NumberColumn<BigDecimalColumn, BigDecimal>
   @Override
   public BigDecimalColumn createCol(String name) {
     return create(name);
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public String getString(int row) {
+    final BigDecimal value = getBigDecimal(row);
+    return String.valueOf(getPrintFormatter().format(value));
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public int size() {
+    return data.size();
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public void clear() {
+    data.clear();
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public BigDecimalColumn setMissing(int index) {
+    set(index, BigDecimalColumnType.missingValueIndicator());
+    return this;
   }
 
   /** {@inheritDoc} */
@@ -176,9 +177,14 @@ public class BigDecimalColumn extends NumberColumn<BigDecimalColumn, BigDecimal>
 
   public Selection isIn(final BigDecimal... values) {
     final Selection results = new BitmapBackedSelection();
-    final ObjectRBTreeSet<BigDecimal> doubleSet = new ObjectRBTreeSet<>(values);
+    final List<BigDecimal> valueList = Arrays.asList(values);
+    final List<BigDecimal> filtered = valueList.stream().filter(Objects::nonNull).collect(Collectors.toList());
+    final ObjectRBTreeSet<BigDecimal> doubleSet = new ObjectRBTreeSet<>(filtered);
     for (int i = 0; i < size(); i++) {
-      if (doubleSet.contains(getBigDecimal(i))) {
+      BigDecimal val = getBigDecimal(i);
+      if (val == null && valueList.contains(null)) {
+        results.add(i);
+      } else if (val != null && doubleSet.contains(val)) {
         results.add(i);
       }
     }
@@ -211,7 +217,9 @@ public class BigDecimalColumn extends NumberColumn<BigDecimalColumn, BigDecimal>
   @Override
   public BigDecimalColumn top(int n) {
     ObjectArrayList<BigDecimal> top = new ObjectArrayList<>();
-    BigDecimal[] values = data.toArray(new BigDecimal[]{});
+    // parallelQuickSort cannot handle null values, but they make no sense to order anyway to we remove them
+    List<BigDecimal> cleaned = data.stream().filter(Objects::nonNull).collect(Collectors.toList());
+    BigDecimal[] values = cleaned.toArray(new BigDecimal[]{});
     ObjectArrays.parallelQuickSort(values, ObjectComparators.OPPOSITE_COMPARATOR);
     for (int i = 0; i < n && i < values.length; i++) {
       top.add(values[i]);
@@ -223,7 +231,9 @@ public class BigDecimalColumn extends NumberColumn<BigDecimalColumn, BigDecimal>
   @Override
   public BigDecimalColumn bottom(final int n) {
     ObjectArrayList<BigDecimal> bottom = new ObjectArrayList<>();
-    BigDecimal[] values = data.toArray(new BigDecimal[]{});
+    // parallelQuickSort cannot handle null values, but they make no sense to order anyway to we remove them
+    List<BigDecimal> cleaned = data.stream().filter(Objects::nonNull).collect(Collectors.toList());
+    BigDecimal[] values = cleaned.toArray(new BigDecimal[]{});
     ObjectArrays.parallelQuickSort(values);
     for (int i = 0; i < n && i < values.length; i++) {
       bottom.add(values[i]);
@@ -268,7 +278,7 @@ public class BigDecimalColumn extends NumberColumn<BigDecimalColumn, BigDecimal>
     return result;
   }
 
-  /** Adds the given float to this column */
+  /** Adds the given BigDecimal to this column */
   public BigDecimalColumn append(final BigDecimal f) {
     data.add(f);
     return this;
@@ -473,7 +483,8 @@ public class BigDecimalColumn extends NumberColumn<BigDecimalColumn, BigDecimal>
   /** {@inheritDoc} */
   @Override
   public BigDecimalColumn set(int i, BigDecimal val) {
-    return val == null ? setMissing(i) : set(i, val);
+    data.set(i, val);
+    return this;
   }
 
   /**
@@ -525,12 +536,16 @@ public class BigDecimalColumn extends NumberColumn<BigDecimalColumn, BigDecimal>
 
   /** {@inheritDoc}
    * TODO: uses double which is imprecise
+   *   Something like this should be more accurate but size will vary
+   *   BigDecimal value = get(rowNumber);
+   *   return value == null ? null : value.unscaledValue().toByteArray();
+   *   or, alternatively
+   *   BigDecimal value = get(rowNumber);
+   *   return value == null ? null : value.toString().getBytes();
    */
   @Override
   public byte[] asBytes(int rowNumber) {
-    // Something like this should be more accurate but size will vary
-    // BigDecimal value = get(rowNumber);
-    // return value == null ? null : value.unscaledValue().toByteArray();
+
     return ByteBuffer.allocate(BigDecimalColumnType.instance().byteSize())
         .putDouble(getDouble(rowNumber))
         .array();
@@ -763,12 +778,22 @@ public class BigDecimalColumn extends NumberColumn<BigDecimalColumn, BigDecimal>
     return result;
   }
 
+  /**
+   * TODO: maybe handle AtomicLong, AtomicInteger, DoubleAccumulator etc. since they are also subclasses of Number
+   *
+   * @param number the number to convert
+   * @return as BigDecimal corresponding to the number
+   */
   protected static BigDecimal toBigDecimal(Number number) {
+    if (number == null) return null;
     if (number instanceof Integer
         || number instanceof Long
         || number instanceof Short
         || number instanceof Byte) {
       return BigDecimal.valueOf(number.longValue());
+    }
+    if (number instanceof BigInteger) {
+      return new BigDecimal((BigInteger) number);
     }
     return BigDecimal.valueOf(number.doubleValue());
   }
