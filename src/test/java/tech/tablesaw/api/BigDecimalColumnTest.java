@@ -5,11 +5,12 @@ import org.junit.jupiter.api.Test;
 import tech.tablesaw.column.numbers.BigDecimalColumnType;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Predicate;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 public class BigDecimalColumnTest {
 
@@ -104,52 +105,60 @@ public class BigDecimalColumnTest {
 
   @Test
   public void testLag() {
-    fail("Not yet implemented");
+    var previous = obs.lag(1);
+    assertArrayEquals(bdArr(null, 1200, null, 3456, 12.1, 3456.4, 985, 1211.9, null), previous.asBigDecimalArray(), "lag 1");
   }
 
   @Test
   public void testGetDouble() {
-    fail("Not yet implemented");
+    assertEquals(3456.4, obs.getDouble(4), "getDouble");
   }
 
   @Test
   public void testRemoveMissing() {
-    fail("Not yet implemented");
+    assertArrayEquals(bdArr(1200, 3456, 12.1, 3456.4, 985, 1211.9, 12.1), obs.removeMissing().asBigDecimalArray(), "remove missing");
   }
 
   @Test
   public void testAppendBigDecimal() {
-    fail("Not yet implemented");
+    var appended = obs.copy().append(new BigDecimal("123.333"));
+    assertEquals(new BigDecimal("123.333"), appended.get(9), "Append BigDecimal");
   }
 
   @Test
   public void testAppendFloat() {
-    fail("Not yet implemented");
+    var appended = obs.copy().append(123.333f);
+    assertEquals(123.333f, appended.get(9).floatValue(), "Append float");
   }
 
   @Test
   public void testAppendDouble() {
-    fail("Not yet implemented");
+    var appended = obs.copy().append(123.333d);
+    assertEquals(123.333d, appended.get(9).doubleValue(), "Append double");
   }
 
   @Test
   public void testAppendInt() {
-    fail("Not yet implemented");
+    var appended = obs.copy().append(1231);
+    assertEquals(1231, appended.get(9).intValue(), "Append int");
   }
 
   @Test
   public void testAppendLong() {
-    fail("Not yet implemented");
+    var appended = obs.copy().append(1231123411234511234L);
+    assertEquals(1231123411234511234L, appended.get(9).longValue(), "Append long");
   }
 
   @Test
   public void testAppendNumber() {
-    fail("Not yet implemented");
+    var appended = obs.copy().append(BigInteger.valueOf(1231123411234511234L));
+    assertEquals(BigDecimal.valueOf(1231123411234511234L), appended.get(9), "Append number");
   }
 
   @Test
   public void testAppendString() {
-    fail("Not yet implemented");
+    var appended = obs.copy().append("123.333444666777888999");
+    assertEquals(new BigDecimal("123.333444666777888999"), appended.get(9), "Append String");
   }
 
   @Test
@@ -286,7 +295,7 @@ public class BigDecimalColumnTest {
     BigDecimal[] arr = new BigDecimal[numbers.length];
     for (int i = 0; i < numbers.length; i++) {
       Number num = numbers[i];
-      arr[i] = num instanceof Long || num instanceof Integer
+      arr[i] = num == null ? null : num instanceof Long || num instanceof Integer
           ? BigDecimal.valueOf(num.longValue())
           : BigDecimal.valueOf(num.doubleValue());
     }
