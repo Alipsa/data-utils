@@ -18,6 +18,7 @@ import tech.tablesaw.selection.Selection;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.util.*;
 import java.util.function.DoubleSupplier;
 import java.util.function.Predicate;
@@ -411,6 +412,17 @@ public class BigDecimalColumn extends NumberColumn<BigDecimalColumn, BigDecimal>
       throw new NumberFormatException(
           "Error adding value to column " + name() + ": " + e.getMessage());
     }
+  }
+
+  public BigDecimalColumn setScale(int numDecimals, RoundingMode... roundingMode) {
+    RoundingMode mode = roundingMode.length > 0 ? roundingMode[0] : RoundingMode.HALF_EVEN;
+    for (int i = 0; i < size(); i++) {
+      BigDecimal val = getBigDecimal(i);
+      if (val != null) {
+        set(i, val.setScale(numDecimals, mode));
+      }
+    }
+    return this;
   }
 
   /** {@inheritDoc} */

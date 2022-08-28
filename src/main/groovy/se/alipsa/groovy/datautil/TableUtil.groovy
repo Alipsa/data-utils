@@ -1,6 +1,10 @@
 package se.alipsa.groovy.datautil
 
+import tech.tablesaw.api.BigDecimalColumn
 import tech.tablesaw.api.ColumnType
+import tech.tablesaw.api.DoubleColumn
+import tech.tablesaw.api.FloatColumn
+import tech.tablesaw.api.NumberColumn
 import tech.tablesaw.api.Row
 import tech.tablesaw.api.Table
 import tech.tablesaw.columns.Column
@@ -41,5 +45,58 @@ class TableUtil {
     BigDecimal bd = BigDecimal.valueOf(value)
     bd = bd.setScale(numDecimals, RoundingMode.HALF_UP)
     return bd.doubleValue()
+  }
+
+  static float round(float value, int numDecimals) {
+    if (numDecimals < 0) throw new IllegalArgumentException("numDecimals cannot be a negative number: was " + numDecimals)
+
+    BigDecimal bd = BigDecimal.valueOf(value)
+    bd = bd.setScale(numDecimals, RoundingMode.HALF_UP)
+    return bd.floatValue()
+  }
+
+  static Column<?> round(Column<?> column, int numDecimals) {
+    if (column instanceof NumberColumn) {
+      return round(column as NumberColumn, numDecimals)
+    }
+    return column
+  }
+
+  static NumberColumn round(NumberColumn column, int numDecimals) {
+    if (numDecimals < 0) throw new IllegalArgumentException("numDecimals cannot be a negative number: was " + numDecimals)
+
+    if (column instanceof BigDecimalColumn) {
+      column.setScale(numDecimals)
+    }
+
+    if (column instanceof DoubleColumn) {
+      for (int i = 0; i < column.size(); i++) {
+        double val = column.getDouble(i)
+        column.set(i, round(val, numDecimals))
+      }
+    }
+
+    if (column instanceof FloatColumn) {
+      for (int i = 0; i < column.size(); i++) {
+        float val = column.getFloat(i);
+        column.set(i, round(val, numDecimals))
+      }
+    }
+    // everything else (IntColumn, ShortColumn, LongColumn cannot be rounded as they have no decimals
+    return column
+  }
+
+  static BigDecimal toBigDecimal(Object number) {
+    if (number == null) return null;
+    if (number instanceof Integer
+        || number instanceof Long
+        || number instanceof Short
+        || number instanceof Byte) {
+      return BigDecimal.valueOf(number.longValue());
+    }
+    if (number instanceof BigInteger) {
+      return new BigDecimal((BigInteger) number);
+    }
+    return new BigDecimal(String.valueOf(number));
   }
 }
