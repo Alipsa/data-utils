@@ -21,6 +21,7 @@ import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.util.*;
 import java.util.function.DoubleSupplier;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -412,17 +413,6 @@ public class BigDecimalColumn extends NumberColumn<BigDecimalColumn, BigDecimal>
       throw new NumberFormatException(
           "Error adding value to column " + name() + ": " + e.getMessage());
     }
-  }
-
-  public BigDecimalColumn setScale(int numDecimals, RoundingMode... roundingMode) {
-    RoundingMode mode = roundingMode.length > 0 ? roundingMode[0] : RoundingMode.HALF_EVEN;
-    for (int i = 0; i < size(); i++) {
-      BigDecimal val = getBigDecimal(i);
-      if (val != null) {
-        set(i, val.setScale(numDecimals, mode));
-      }
-    }
-    return this;
   }
 
   /** {@inheritDoc} */
@@ -846,5 +836,128 @@ public class BigDecimalColumn extends NumberColumn<BigDecimalColumn, BigDecimal>
   protected void setPrintFormatter(BigDecimalColumnFormatter formatter) {
     super.setPrintFormatter(formatter);
   }
+
+  // BigDecimalColumn Specific methods
+  public BigDecimalColumn setScale(int numDecimals, RoundingMode... roundingMode) {
+    RoundingMode mode = roundingMode.length > 0 ? roundingMode[0] : RoundingMode.HALF_EVEN;
+    for (int i = 0; i < size(); i++) {
+      BigDecimal val = getBigDecimal(i);
+      if (val != null) {
+        set(i, val.setScale(numDecimals, mode));
+      }
+    }
+    return this;
+  }
+
+  public BigDecimalColumn plus(BigDecimalColumn column) {
+    if (size() > column.size()) {
+      for (int i = 0; i < column.size(); i++) {
+        var orgVal = getBigDecimal(i);
+        var addVal = column.getBigDecimal(i);
+        if (orgVal == null || addVal == null) {
+          setMissing(i);
+        } else {
+          set(i, orgVal.add(addVal));
+        }
+      }
+    } else {
+      for (int i = 0; i < size(); i++) {
+        var orgVal = getBigDecimal(i);
+        var addVal = column.getBigDecimal(i);
+        if (orgVal == null || addVal == null) {
+          setMissing(i);
+        } else {
+          set(i, orgVal.add(addVal));
+        }
+      }
+    }
+    return this;
+  }
+
+  public BigDecimalColumn subtract(BigDecimalColumn column) {
+    if (size() > column.size()) {
+      for (int i = 0; i < column.size(); i++) {
+        var orgVal = getBigDecimal(i);
+        var addVal = column.getBigDecimal(i);
+        if (orgVal == null || addVal == null) {
+          setMissing(i);
+        } else {
+          set(i, orgVal.subtract(addVal));
+        }
+      }
+    } else {
+      for (int i = 0; i < size(); i++) {
+        var orgVal = getBigDecimal(i);
+        var addVal = column.getBigDecimal(i);
+        if (orgVal == null || addVal == null) {
+          setMissing(i);
+        } else {
+          set(i, orgVal.subtract(addVal));
+        }
+      }
+    }
+    return this;
+  }
+
+  public BigDecimalColumn multiply(BigDecimalColumn column) {
+    if (size() > column.size()) {
+      for (int i = 0; i < column.size(); i++) {
+        var orgVal = getBigDecimal(i);
+        var addVal = column.getBigDecimal(i);
+        if (orgVal == null || addVal == null) {
+          setMissing(i);
+        } else {
+          set(i, orgVal.multiply(addVal));
+        }
+      }
+    } else {
+      for (int i = 0; i < size(); i++) {
+        var orgVal = getBigDecimal(i);
+        var addVal = column.getBigDecimal(i);
+        if (orgVal == null || addVal == null) {
+          setMissing(i);
+        } else {
+          set(i, orgVal.multiply(addVal));
+        }
+      }
+    }
+    return this;
+  }
+
+  public BigDecimalColumn divide(BigDecimalColumn column) {
+    if (size() > column.size()) {
+      for (int i = 0; i < column.size(); i++) {
+        var orgVal = getBigDecimal(i);
+        var addVal = column.getBigDecimal(i);
+        if (orgVal == null || addVal == null) {
+          setMissing(i);
+        } else {
+          set(i, orgVal.divide(addVal, RoundingMode.HALF_EVEN));
+        }
+      }
+    } else {
+      for (int i = 0; i < size(); i++) {
+        var orgVal = getBigDecimal(i);
+        var addVal = column.getBigDecimal(i);
+        if (orgVal == null || addVal == null) {
+          setMissing(i);
+        } else {
+          set(i, orgVal.divide(addVal, RoundingMode.HALF_EVEN));
+        }
+      }
+    }
+    return this;
+  }
+
+  public BigDecimalColumn apply(Function<BigDecimal, BigDecimal> function) {
+    for (int i = 0; i < size(); i++) {
+      var val = getBigDecimal(i);
+      if (val != null) {
+        set(i, function.apply(val));
+      }
+    }
+    return this;
+  }
+
 
 }
