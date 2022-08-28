@@ -94,6 +94,11 @@ public class BigDecimalColumnFormatter extends NumberColumnFormatter {
     return format.format(value);
   }
 
+  @Override
+  public NumberFormat getFormat() {
+    return format;
+  }
+
   private boolean isMissingValue(BigDecimal value) {
     return BigDecimalColumnType.valueIsMissing(value);
   }

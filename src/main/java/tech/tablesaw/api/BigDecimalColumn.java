@@ -4,6 +4,7 @@ package tech.tablesaw.api;
 import com.google.common.base.Preconditions;
 import it.unimi.dsi.fastutil.doubles.DoubleIterator;
 import it.unimi.dsi.fastutil.objects.*;
+import tech.tablesaw.column.numbers.BigDecimalComparator;
 import tech.tablesaw.column.numbers.BigDecimalColumnFormatter;
 import tech.tablesaw.column.numbers.BigDecimalColumnType;
 import tech.tablesaw.column.numbers.BigDecimalParser;
@@ -17,7 +18,6 @@ import tech.tablesaw.selection.Selection;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.nio.ByteBuffer;
 import java.util.*;
 import java.util.function.DoubleSupplier;
 import java.util.function.Predicate;
@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static tech.tablesaw.column.numbers.BigDecimalComparator.compareBigDecimals;
 
 public class BigDecimalColumn extends NumberColumn<BigDecimalColumn, BigDecimal>
     implements NumberFillers<BigDecimalColumn> {
@@ -204,7 +205,7 @@ public class BigDecimalColumn extends NumberColumn<BigDecimalColumn, BigDecimal>
   /** {@inheritDoc} */
   @Override
   public BigDecimalColumn unique() {
-    final ObjectSet<BigDecimal> values = new ObjectOpenHashSet<>();
+    final ObjectSet<BigDecimal> values = new ObjectLinkedOpenHashSet<>();
     for (int i = 0; i < size(); i++) {
       values.add(getBigDecimal(i));
     }
@@ -398,7 +399,14 @@ public class BigDecimalColumn extends NumberColumn<BigDecimalColumn, BigDecimal>
   @Override
   public BigDecimalColumn appendCell(final String value, AbstractColumnParser<?> parser) {
     try {
-      return append(parse(value));
+      Object val = parser.parse(value);
+      if (val instanceof BigDecimal) {
+        return append((BigDecimal) val);
+      } else if (val instanceof Number) {
+        return append((Number) val);
+      } else {
+        return append(BigDecimal.valueOf(parser.parseDouble(value)));
+      }
     } catch (final NumberFormatException e) {
       throw new NumberFormatException(
           "Error adding value to column " + name() + ": " + e.getMessage());
@@ -473,13 +481,6 @@ public class BigDecimalColumn extends NumberColumn<BigDecimalColumn, BigDecimal>
     return compareBigDecimals(o1, o2);
   }
 
-  public static int compareBigDecimals(BigDecimal o1, BigDecimal o2) {
-    if ((o1 == null) && (o2 == null)) return 0;
-    if ((o1 != null) && (o2 == null)) return -1;
-    if (o1 == null) return 1;
-    return o1.compareTo(o2);
-  }
-
   /** {@inheritDoc} */
   @Override
   public BigDecimalColumn set(int i, BigDecimal val) {
@@ -527,7 +528,7 @@ public class BigDecimalColumn extends NumberColumn<BigDecimalColumn, BigDecimal>
     BigDecimalColumn result = BigDecimalColumn.create(name());
     for (int i = 0; i < size(); i++) {
       BigDecimal d = getBigDecimal(i);
-      if (test.test(d)) {
+      if (d != null && test.test(d)) {
         result.append(d);
       }
     }
@@ -545,10 +546,14 @@ public class BigDecimalColumn extends NumberColumn<BigDecimalColumn, BigDecimal>
    */
   @Override
   public byte[] asBytes(int rowNumber) {
-
-    return ByteBuffer.allocate(BigDecimalColumnType.instance().byteSize())
-        .putDouble(getDouble(rowNumber))
+    BigDecimal val = getBigDecimal(rowNumber);
+    return val == null ? null : val.toString().getBytes();
+    /* TODO: not sure how this is supposed to work. A fixed sice byte array will either need to be huge or values will be lost
+    return val == null ? null : ByteBuffer.allocate(BigDecimalColumnType.instance().byteSize())
+        .put(val.toString().getBytes())
         .array();
+
+     */
   }
 
   /** {@inheritDoc} */
@@ -580,17 +585,17 @@ public class BigDecimalColumn extends NumberColumn<BigDecimalColumn, BigDecimal>
   /** {@inheritDoc} */
   @Override
   public void sortAscending() {
-    data.sort(ObjectComparators.NATURAL_COMPARATOR);
+    data.sort(new BigDecimalComparator());
   }
 
   /** {@inheritDoc} */
   @Override
   public void sortDescending() {
-    data.sort(ObjectComparators.OPPOSITE_COMPARATOR);
+    data.sort(new BigDecimalComparator().reversed());
   }
 
 
-  public BigDecimalColumn fillWith(final ObjectIterator<BigDecimal> iterator) {
+  public BigDecimalColumn fillWith(final Iterator<BigDecimal> iterator) {
     for (int r = 0; r < size(); r++) {
       if (!iterator.hasNext()) {
         break;

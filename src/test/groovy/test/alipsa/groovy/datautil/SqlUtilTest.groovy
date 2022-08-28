@@ -50,7 +50,6 @@ class SqlUtilTest {
                 }
             }
         }
-        println("Found ${idList.size()} rows")
         assertEquals(2, idList.size(), "Number of rows")
     }
 }

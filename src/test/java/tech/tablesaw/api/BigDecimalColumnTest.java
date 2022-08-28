@@ -1,20 +1,28 @@
 package tech.tablesaw.api;
 
 import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
+import it.unimi.dsi.fastutil.doubles.DoubleListIterator;
 import org.junit.jupiter.api.Test;
+import tech.tablesaw.column.numbers.BigDecimalColumnFormatter;
 import tech.tablesaw.column.numbers.BigDecimalColumnType;
+import tech.tablesaw.columns.AbstractColumnParser;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
+import java.text.NumberFormat;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static tech.tablesaw.columns.numbers.fillers.DoubleRangeIterable.range;
 
 public class BigDecimalColumnTest {
 
-  Number[] values = new Number[]{1200, null, 3456, 12.1, 3456.4, 985, 1211.9, null, 12.1};
+  BigDecimal[] values = bdArr(1200, null, 3456, 12.1, 3456.4, 985, 1211.9, null, 12.1);
   BigDecimalColumn obs = BigDecimalColumn.create("values", values);
   @Test
   public void testGetString() {
@@ -90,7 +98,8 @@ public class BigDecimalColumnTest {
 
   @Test
   public void testUnique(){
-    assertEquals(7, obs.unique().size(), "unique values");
+    var actual = obs.unique().asBigDecimalArray();
+    assertArrayEquals(bdArr(1200, null, 3456, 12.1, 3456.4, 985, 1211.9), actual , "unique values: " + Arrays.asList(actual));
   }
 
   @Test
@@ -163,132 +172,239 @@ public class BigDecimalColumnTest {
 
   @Test
   public void testAppendColumn() {
-    fail("Not yet implemented");
+    var nums = BigDecimalColumn.create("nums", BigDecimal.valueOf(12), new BigDecimal("15.123"), BigDecimal.valueOf(26.3));
+    var col = obs.copy().append(nums);
+    assertEquals(12, col.size(), "appended column size");
+    assertEquals(new BigDecimal("15.123"), col.getBigDecimal(10), "value of appended col at index 10");
   }
 
   @Test
   public void testAppendValueFromColumn() {
-    fail("Not yet implemented");
+    var nums = BigDecimalColumn.create("nums", BigDecimal.valueOf(12), new BigDecimal("15.123"), BigDecimal.valueOf(26.3));
+    var col = obs.copy().append(nums, 2);
+    assertEquals(10, col.size(), "appended column size");
+    assertEquals(BigDecimal.valueOf(26.3), col.getBigDecimal(9), "value of appended value in col");
   }
 
   @Test
   public void testAppendMissing() {
-    fail("Not yet implemented");
+    var col = obs.copy().appendMissing();
+    assertEquals(10, col.size(), "appended column size");
+    assertNull(col.getBigDecimal(9), "value of appended missing");
   }
 
   @Test
   public void testAppendObject() {
-    fail("Not yet implemented");
+    Object object = new BigDecimal("1211.1212");
+    assertEquals(
+        object,
+        obs.copy().appendObj(object).get(9)
+    );
   }
 
   @Test
   public void testAppendCell() {
-    fail("Not yet implemented");
+    String val = "1231.1232";
+    assertEquals(
+        new BigDecimal(val),
+        obs.copy().appendCell(val).get(9)
+    );
   }
 
   @Test
   public void testAppendCellWithParser() {
-    fail("Not yet implemented");
+    var parser = new AbstractColumnParser<BigDecimal>(BigDecimalColumnType.instance()) {
+      @Override
+      public boolean canParse(String s) {
+        return true;
+      }
+      @Override
+      public BigDecimal parse(String s) {
+        return s == null ? null : new BigDecimal(s.replaceAll(",", "\\."));
+      }
+    };
+
+    assertEquals(
+        new BigDecimal("101.234"),
+        obs.copy().appendCell("101,234", parser).get(9)
+    );
+
   }
 
   @Test
   public void testGetUnformattedString() {
-    fail("Not yet implemented");
+    assertEquals("", obs.getUnformattedString(1), "unformatted string for null");
+    assertEquals("1200", obs.getUnformattedString(0));
   }
 
   @Test
   public void testValueHash() {
-    fail("Not yet implemented");
+    assertEquals(BigDecimal.valueOf(1211.9).hashCode(), obs.valueHash(6), "Hashcode");
   }
 
   @Test
   public void testEquals() {
-    fail("Not yet implemented");
+    assertTrue(obs.equals(3,8), "Column equals");
   }
 
   @Test
   public void testIterator() {
-    fail("Not yet implemented");
+    int i = 0;
+    for (BigDecimal val : obs) {
+      assertEquals(values[i++], val, "Iterator");
+    }
   }
 
   @Test
   public void testCompare() {
-    fail("Not yet implemented");
+    var bd1 = new BigDecimal("345.678");
+    var bd2 = new BigDecimal("12.123");
+    var bd3 = new BigDecimal("678.56");
+    assertEquals(bd1.compareTo(bd2), obs.compare(bd1, bd2));
+    assertEquals(bd1.compareTo(bd3), obs.compare(bd1, bd3));
   }
 
   @Test
   public void testFilter() {
-    fail("Not yet implemented");
+    assertArrayEquals(bdArr(12.1, 985, 12.1), obs.filter(p -> p.compareTo(BigDecimal.valueOf(985)) < 1).asBigDecimalArray());
   }
 
   @Test
   public void testAsBytes() {
-    fail("Not yet implemented");
+    var exp = values[4].toString();
+    assertArrayEquals(
+        exp.getBytes(),
+        obs.asBytes(4),
+        "as bytes: " + exp + " vs " + new String(obs.asBytes(4))
+    );
   }
 
   @Test
   public void testAsSet() {
-    fail("Not yet implemented");
+    var exp = new HashSet<>(Arrays.asList(values));
+    assertEquals(exp, obs.asSet(), "as set");
   }
 
   @Test
   public void testCountUnique() {
-    fail("Not yet implemented");
+    assertEquals(7, obs.countUnique(), "unique value count");
   }
 
   @Test
   public void testIsMissingValue() {
-    fail("Not yet implemented");
+    assertTrue(obs.isMissingValue(null));
+    assertFalse(obs.isMissingValue(BigDecimal.valueOf(12)));
   }
 
   @Test
   public void testIsMissing() {
-    fail("Not yet implemented");
+    assertTrue(obs.isMissing(1));
+    assertFalse(obs.isMissing(0));
   }
 
   @Test
   public void testSortAscending() {
-    fail("Not yet implemented");
+    var actual = obs.copy();
+    actual.sortAscending();
+    assertArrayEquals(bdArr(null, null, 12.1, 12.1, 985, 1200, 1211.9, 3456, 3456.4), actual.asBigDecimalArray());
   }
 
   @Test
   public void testSortDescending() {
-    fail("Not yet implemented");
+    var actual = obs.copy();
+    actual.sortDescending();
+    assertArrayEquals(bdArr(3456.4, 3456, 1211.9, 1200, 985, 12.1, 12.1, null, null), actual.asBigDecimalArray());
   }
 
   @Test
   public void testFillWith() {
-    fail("Not yet implemented");
+    var col = BigDecimalColumn.create("test", 5);
+    var arr = bdArr(123, 234, 345, 1.1, 1.2);
+    col.fillWith(Arrays.asList(arr).iterator());
+    assertArrayEquals(arr, col.asBigDecimalArray(), "fillWith bigdecimals");
+
+    col = BigDecimalColumn.create("test", 5);
+    var arr2 = DoubleColumn.create("doubles", new Double[]{123.0, 234.2, 345d, 1.1, 1.2});
+    col.fillWith((DoubleListIterator)arr2.iterator());
+    assertArrayEquals(arr2.asDoubleArray(), col.asDoubleArray(), "fillWith doubles");
+
+    col = BigDecimalColumn.create("test", 5);
+    var arr3 = DoubleColumn.create("doubles", new Double[]{123.0, 234.2, 345d, 1.1, 1.2});
+    col.fillWith(arr3.range());
+    // 345 - 1.1 = 343.9
+    assertArrayEquals(new double[]{343.9, 343.9, 343.9, 343.9, 343.9}, col.asDoubleArray(), "fillWith double range");
+
+    col = BigDecimalColumn.create("test", 5);
+    var actual = col.fillWith(range(1.0, 12.0, 3.1));
+    assertArrayEquals(new double[]{1.0, 4.1, 7.2, 10.3, 1.0}, actual.asDoubleArray(), 0.0000001, "fill with range: " + actual.print());
+
+    col = BigDecimalColumn.create("test", 5);
+    var val = new BigDecimal("234.65654");
+    col.fillWith(new BigDecimal("234.65654"));
+    assertEquals(val.multiply(
+        BigDecimal.valueOf(5)).setScale(5, RoundingMode.HALF_EVEN),
+        BigDecimal.valueOf(col.sum()).setScale(5, RoundingMode.HALF_EVEN),
+        "fillWith bigdecimal"
+    );
   }
 
   @Test
   public void testAsLongColumn() {
-    fail("Not yet implemented");
+    assertArrayEquals(
+        new Long[]{1200L, null, 3456L, 12L, 3456L, 985L, 1211L, null, 12L},
+        obs.asLongColumn().asObjectArray(),
+        "as long column");
   }
 
   @Test
   public void testAsIntColumn() {
-    fail("Not yet implemented");
+    assertArrayEquals(
+        new Integer[]{1200, null, 3456, 12, 3456, 985, 1211, null, 12},
+        obs.asIntColumn().asObjectArray(),
+        "as int column");
   }
 
   @Test
   public void testAsShortColumn() {
-    fail("Not yet implemented");
+    assertArrayEquals(
+        new Short[]{1200, null, 3456, 12, 3456, 985, 1211, null, 12},
+        obs.asShortColumn().asObjectArray(),
+        "as short column");
   }
 
   @Test
   public void testAsFloatColumn() {
-    fail("Not yet implemented");
+    assertArrayEquals(
+        new Float[]{1200f, null, 3456f, 12.1f, 3456.4f, 985f, 1211.9f, null, 12.1f},
+        obs.asFloatColumn().asObjectArray(),
+        "as float column"
+    );
   }
 
   @Test
   public void testAddAll() {
-    fail("Not yet implemented");
+    var col = BigDecimalColumn.create("test");
+    col.addAll(List.of(new BigDecimal("99.123"), BigDecimal.valueOf(445)));
+    assertEquals(2, col.size());
+    assertEquals(new BigDecimal("99.123"), col.getBigDecimal(0));
   }
 
   @Test
   public void testSetPrintFormatter() {
-    fail("Not yet implemented");
+    var formatter = new BigDecimalColumnFormatter(NumberFormat.getInstance());
+    assertNotNull(formatter.getFormat(), "No format assigned");
+    formatter.getFormat().setMinimumFractionDigits(3);
+    obs.setPrintFormatter(formatter);
+    assertEquals("Column: values\n"
+                    + "1,200.000\n"
+                    + "\n"
+                    + "3,456.000\n"
+                    + "12.100\n"
+                    + "3,456.400\n"
+                    + "985.000\n"
+                    + "1,211.900\n"
+                    + "\n"
+                    + "12.100\n", obs.print());
   }
 
   private BigDecimal[] bdArr(Number... numbers) {
