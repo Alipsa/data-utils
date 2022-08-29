@@ -22,7 +22,7 @@ import static tech.tablesaw.columns.numbers.fillers.DoubleRangeIterable.range;
 
 public class BigDecimalColumnTest {
 
-  BigDecimal[] values = bdArr(1200, null, 3456, 12.1, 3456.4, 985, 1211.9, null, 12.1);
+  BigDecimal[] values = bdArr(9, "1200", null, "3456", "12.1", "3456.4", "985", "1211.9", null, "12.1");
   BigDecimalColumn obs = BigDecimalColumn.create("values", values);
   @Test
   public void testGetString() {
@@ -99,33 +99,43 @@ public class BigDecimalColumnTest {
   @Test
   public void testUnique(){
     var actual = obs.unique().asBigDecimalArray();
-    assertArrayEquals(bdArr(1200, null, 3456, 12.1, 3456.4, 985, 1211.9), actual , "unique values: " + Arrays.asList(actual));
+    assertArrayEquals(bdArr(9, "1200", null, "3456", "12.1", "3456.4", "985", "1211.9"),
+        actual ,
+        "unique values: " + Arrays.asList(actual));
   }
 
   @Test
   public void testTop() {
-    assertArrayEquals(bdArr(3456.4, 3456, 1211.9), obs.top(3).asBigDecimalArray());
+    assertArrayEquals(bdArr(9, "3456.4", "3456", "1211.9"), obs.top(3).asBigDecimalArray());
   }
 
   @Test
   public void testBottom() {
-    assertArrayEquals(bdArr(12.1, 12.1, 985), obs.bottom(3).asObjectArray());
+    assertArrayEquals(bdArr(9, "12.1", "12.1", "985"), obs.bottom(3).asObjectArray());
   }
 
   @Test
   public void testLag() {
     var previous = obs.lag(1);
-    assertArrayEquals(bdArr(null, 1200, null, 3456, 12.1, 3456.4, 985, 1211.9, null), previous.asBigDecimalArray(), "lag 1");
+    assertArrayEquals(bdArr(9, null, "1200", null, "3456", "12.1", "3456.4", "985", "1211.9", null), previous.asBigDecimalArray(), "lag 1");
   }
 
   @Test
   public void testGetDouble() {
-    assertEquals(3456.4, obs.getDouble(4), "getDouble");
+    assertEquals(
+        3456.4,
+        obs.getDouble(4),
+        "getDouble"
+    );
   }
 
   @Test
   public void testRemoveMissing() {
-    assertArrayEquals(bdArr(1200, 3456, 12.1, 3456.4, 985, 1211.9, 12.1), obs.removeMissing().asBigDecimalArray(), "remove missing");
+    assertArrayEquals(
+        bdArr(9, "1200", "3456", "12.1", "3456.4", "985", "1211.9", "12.1"),
+        obs.removeMissing().asBigDecimalArray(),
+        "remove missing"
+    );
   }
 
   @Test
@@ -172,18 +182,31 @@ public class BigDecimalColumnTest {
 
   @Test
   public void testAppendColumn() {
-    var nums = BigDecimalColumn.create("nums", BigDecimal.valueOf(12), new BigDecimal("15.123"), BigDecimal.valueOf(26.3));
+    var nums = BigDecimalColumn.create(
+        "nums",
+        BigDecimal.valueOf(12), new BigDecimal("15.123"), BigDecimal.valueOf(26.3)
+    );
     var col = obs.copy().append(nums);
     assertEquals(12, col.size(), "appended column size");
-    assertEquals(new BigDecimal("15.123"), col.getBigDecimal(10), "value of appended col at index 10");
+    assertEquals(
+        new BigDecimal("15.123"),
+        col.getBigDecimal(10),
+        "value of appended col at index 10"
+    );
   }
 
   @Test
   public void testAppendValueFromColumn() {
-    var nums = BigDecimalColumn.create("nums", BigDecimal.valueOf(12), new BigDecimal("15.123"), BigDecimal.valueOf(26.3));
+    var nums = BigDecimalColumn.create(
+        "nums",
+        BigDecimal.valueOf(12), new BigDecimal("15.123"), BigDecimal.valueOf(26.3)
+    );
     var col = obs.copy().append(nums, 2);
     assertEquals(10, col.size(), "appended column size");
-    assertEquals(BigDecimal.valueOf(26.3), col.getBigDecimal(9), "value of appended value in col");
+    assertEquals(
+        BigDecimal.valueOf(26.3),
+        col.getBigDecimal(9),
+        "value of appended value in col");
   }
 
   @Test
@@ -234,12 +257,13 @@ public class BigDecimalColumnTest {
   @Test
   public void testGetUnformattedString() {
     assertEquals("", obs.getUnformattedString(1), "unformatted string for null");
-    assertEquals("1200", obs.getUnformattedString(0));
+    assertEquals("1200.000000000", obs.getUnformattedString(0));
   }
 
   @Test
   public void testValueHash() {
-    assertEquals(BigDecimal.valueOf(1211.9).hashCode(), obs.valueHash(6), "Hashcode");
+    assertEquals(new BigDecimal("1211.9").setScale(9, RoundingMode.HALF_EVEN).hashCode(),
+        obs.valueHash(6), "Hashcode");
   }
 
   @Test
@@ -266,7 +290,9 @@ public class BigDecimalColumnTest {
 
   @Test
   public void testFilter() {
-    assertArrayEquals(bdArr(12.1, 985, 12.1), obs.filter(p -> p.compareTo(BigDecimal.valueOf(985)) < 1).asBigDecimalArray());
+    assertArrayEquals(bdArr(9, "12.1", "985", "12.1"),
+        obs.filter(p -> p.compareTo(new BigDecimal("985").setScale(9, RoundingMode.HALF_EVEN)) < 1)
+            .asBigDecimalArray());
   }
 
   @Test
@@ -287,7 +313,11 @@ public class BigDecimalColumnTest {
 
   @Test
   public void testCountUnique() {
-    assertEquals(7, obs.countUnique(), "unique value count");
+    assertEquals(
+        7,
+        obs.countUnique(),
+        "unique value count"
+    );
   }
 
   @Test
@@ -306,14 +336,20 @@ public class BigDecimalColumnTest {
   public void testSortAscending() {
     var actual = obs.copy();
     actual.sortAscending();
-    assertArrayEquals(bdArr(null, null, 12.1, 12.1, 985, 1200, 1211.9, 3456, 3456.4), actual.asBigDecimalArray());
+    assertArrayEquals(
+        bdArr(9, null, null, "12.1", "12.1", "985", "1200", "1211.9", "3456", "3456.4"),
+        actual.asBigDecimalArray()
+    );
   }
 
   @Test
   public void testSortDescending() {
     var actual = obs.copy();
     actual.sortDescending();
-    assertArrayEquals(bdArr(3456.4, 3456, 1211.9, 1200, 985, 12.1, 12.1, null, null), actual.asBigDecimalArray());
+    assertArrayEquals(
+        bdArr(9, "3456.4", "3456", "1211.9", "1200", "985", "12.1", "12.1", null, null),
+        actual.asBigDecimalArray()
+    );
   }
 
   @Test
@@ -332,11 +368,19 @@ public class BigDecimalColumnTest {
     var arr3 = DoubleColumn.create("doubles", new Double[]{123.0, 234.2, 345d, 1.1, 1.2});
     col.fillWith(arr3.range());
     // 345 - 1.1 = 343.9
-    assertArrayEquals(new double[]{343.9, 343.9, 343.9, 343.9, 343.9}, col.asDoubleArray(), "fillWith double range");
+    assertArrayEquals(
+        new double[]{343.9, 343.9, 343.9, 343.9, 343.9},
+        col.asDoubleArray(),
+        "fillWith double range"
+    );
 
     col = BigDecimalColumn.create("test", 5);
     var actual = col.fillWith(range(1.0, 12.0, 3.1));
-    assertArrayEquals(new double[]{1.0, 4.1, 7.2, 10.3, 1.0}, actual.asDoubleArray(), 0.0000001, "fill with range: " + actual.print());
+    assertArrayEquals(
+        new double[]{1.0, 4.1, 7.2, 10.3, 1.0},
+        actual.asDoubleArray(), 0.0000001,
+        "fill with range: " + actual.print()
+    );
 
     col = BigDecimalColumn.create("test", 5);
     var val = new BigDecimal("234.65654");
@@ -395,16 +439,68 @@ public class BigDecimalColumnTest {
     assertNotNull(formatter.getFormat(), "No format assigned");
     formatter.getFormat().setMinimumFractionDigits(3);
     obs.setPrintFormatter(formatter);
-    assertEquals("Column: values\n"
-                    + "1,200.000\n"
-                    + "\n"
-                    + "3,456.000\n"
-                    + "12.100\n"
-                    + "3,456.400\n"
-                    + "985.000\n"
-                    + "1,211.900\n"
-                    + "\n"
-                    + "12.100\n", obs.print());
+    var nl = System.lineSeparator();
+    assertEquals("Column: values" + nl
+                    + "1,200.000" + nl
+                    + nl
+                    + "3,456.000" + nl
+                    + "12.100" + nl
+                    + "3,456.400" + nl
+                    + "985.000" + nl
+                    + "1,211.900" + nl
+                    + nl
+                    + "12.100" + nl, obs.print());
+  }
+
+  @Test
+  void testAddition() {
+    assertArrayEquals(
+        bdArr(9, "1201.1", null, "3457.1", "13.2", "3457.5", "986.1", "1213.0", null, "13.2"),
+        obs.add(BigDecimalColumn.create("plus",
+            bdArr(1.1, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1))).asBigDecimalArray()
+    );
+  }
+
+  @Test
+  void testSubtraction() {
+    assertArrayEquals(
+        new double[]{1200-1.1, Double.NaN, 3456-1.1, 12.1-1.1, 3456.4-1.1, 985-1.1, 1211.9-1.1, Double.NaN, 12.1-1.1},
+        obs.subtract(BigDecimalColumn.create("minus",
+            bdArr(1.1, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1))).asDoubleArray(),
+        0.00000001
+    );
+  }
+
+  @Test
+  void testMultiply() {
+    assertArrayEquals(
+        new double[]{1200*1.1, Double.NaN, 3456*1.1, 12.1*1.1, 3456.4*1.1, 985*1.1, 1211.9*1.1, Double.NaN, 12.1*1.1},
+
+        obs.multiply(BigDecimalColumn.create("multiply",
+            bdArr(1.1, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1))).asDoubleArray(),
+        0.00000001
+    );
+  }
+
+  @Test
+  void testDivide() {
+    assertArrayEquals(
+        bdArr(9, "1090.909090909", null, "3141.818181818", "11.000000000", "3142.181818182", "895.454545455", "1101.727272727", null, "11.000000000"),
+        obs.copy().divide(BigDecimalColumn.create("divide", bdArr(1.1, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1)))
+            .setScale(9)
+            .asBigDecimalArray()
+    );
+  }
+
+  @Test
+  void testApply() {
+    var exp = new BigDecimal[values.length];
+    int i = 0;
+    for (var val : values) {
+      exp[i++] = val == null ? null : val.pow(3).divide(BigDecimal.valueOf(100), RoundingMode.HALF_EVEN);
+    }
+    var act = obs.copy().apply(bd -> bd.pow(3).divide(BigDecimal.valueOf(100), RoundingMode.HALF_EVEN));
+    assertArrayEquals(exp, act.asObjectArray());
   }
 
   private BigDecimal[] bdArr(Number... numbers) {
@@ -414,6 +510,15 @@ public class BigDecimalColumnTest {
       arr[i] = num == null ? null : num instanceof Long || num instanceof Integer
           ? BigDecimal.valueOf(num.longValue())
           : BigDecimal.valueOf(num.doubleValue());
+    }
+    return arr;
+  }
+
+  private BigDecimal[] bdArr(int numDecimals, String... numbers) {
+    BigDecimal[] arr = new BigDecimal[numbers.length];
+    for (int i = 0; i < numbers.length; i++) {
+      String num = numbers[i];
+      arr[i] = num == null ? null : new BigDecimal(num).setScale(numDecimals, RoundingMode.HALF_EVEN);
     }
     return arr;
   }

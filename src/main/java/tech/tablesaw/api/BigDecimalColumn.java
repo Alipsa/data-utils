@@ -849,6 +849,14 @@ public class BigDecimalColumn extends NumberColumn<BigDecimalColumn, BigDecimal>
     return this;
   }
 
+  public BigDecimalColumn add(BigDecimalColumn column) {
+    return plus(column);
+  }
+
+  /**
+   * naming it plus() has the nice benefit of overloading the + operator in groovy
+   * so you can do column1 + column2
+   */
   public BigDecimalColumn plus(BigDecimalColumn column) {
     if (size() > column.size()) {
       for (int i = 0; i < column.size(); i++) {
