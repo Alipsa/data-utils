@@ -34,7 +34,7 @@
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
-        <groovy.version>[4.0.3, )</groovy.version>
+        <groovy.version>[4.0.6, )</groovy.version>
         <groovy.sourceDirectory>${basedir}/src/main/groovy</groovy.sourceDirectory>
     </properties>
 
@@ -43,11 +43,13 @@
             <groupId>org.apache.groovy</groupId>
             <artifactId>groovy</artifactId>
             <version>${groovy.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.groovy</groupId>
             <artifactId>groovy-sql</artifactId>
             <version>${groovy.version}</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
