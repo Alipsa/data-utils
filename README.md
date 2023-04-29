@@ -49,6 +49,10 @@ Maven:
 
 ## Version history
 
+### 1.0.4
+- upgrade to jdk17
+- add conversions to/from Tablesaw and Matrix
+- 
 ### 1.0.3, 2022-12-24
 - upgrade transient dependencies with cve issues
 - upgrade to groovy 4.0.6
