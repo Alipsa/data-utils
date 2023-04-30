@@ -7,7 +7,6 @@ import tech.tablesaw.api.NumericColumn
 import tech.tablesaw.api.Row
 import tech.tablesaw.api.Table
 import tech.tablesaw.columns.Column
-import tech.tablesaw.joining.DataFrameJoiner
 import tech.tablesaw.table.Relation
 
 import java.util.stream.Collectors
@@ -53,7 +52,7 @@ class Gtable extends Table {
     data.each {
       columns << TableUtil.createColumn(columnTypes.get(i++), it.key, it.value)
     }
-    create(columns) as Gtable
+    create(columns)
   }
 
   static Gtable create() {
@@ -62,7 +61,7 @@ class Gtable extends Table {
 
   /** Returns a new, empty table (without rows or columns) with the given name */
   static Gtable create(String tableName) {
-    return new Gtable(tableName);
+    return new Gtable(tableName)
   }
 
   /**
@@ -71,7 +70,7 @@ class Gtable extends Table {
    * @param columns one or more columns, all of the same @code{column.size()}
    */
   static Gtable create(Column<?>... columns) {
-    return new Gtable(null, columns);
+    return new Gtable(null, columns)
   }
 
   /**
@@ -80,7 +79,7 @@ class Gtable extends Table {
    * @param columns one or more columns, all of the same @code{column.size()}
    */
   static Gtable create(Collection<Column<?>> columns) {
-    return new Gtable(null, columns);
+    return new Gtable(null, columns)
   }
 
   /**
@@ -89,7 +88,7 @@ class Gtable extends Table {
    * @param columns one or more columns, all of the same @code{column.size()}
    */
   static Gtable create(Stream<Column<?>> columns) {
-    return new Gtable(null, columns.collect(Collectors.toList()));
+    return new Gtable(null, columns.collect(Collectors.toList()))
   }
 
   /**
@@ -109,7 +108,7 @@ class Gtable extends Table {
    * @param columns one or more columns, all of the same @code{column.size()}
    */
   static Gtable create(String name, Collection<Column<?>> columns) {
-    return new Gtable(name, columns);
+    return new Gtable(name, columns)
   }
 
   /**
@@ -119,7 +118,7 @@ class Gtable extends Table {
    * @param columns one or more columns, all of the same @code{column.size()}
    */
   static Gtable create(String name, Stream<Column<?>> columns) {
-    return new Gtable(name, columns.collect(Collectors.toList()));
+    return new Gtable(name, columns.collect(Collectors.toList()))
   }
 
   Object getAt(int row, int column) {
@@ -250,7 +249,7 @@ class Gtable extends Table {
     return create(super.transpose(includeColumnHeadingsAsFirstColumn, useFirstColumnForHeadings))
   }
 
-  Gtable melt(List<String> idVariables, List<NumericColumn<?>> measuredVariables, Boolean dropMissing) {
+  Gtable melt(List<String> idVariables, List<NumericColumn<? extends Number>> measuredVariables, Boolean dropMissing) {
     return create(super.melt(idVariables, measuredVariables, dropMissing))
   }
 
