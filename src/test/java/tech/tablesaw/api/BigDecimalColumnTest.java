@@ -11,10 +11,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.text.NumberFormat;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
@@ -26,6 +23,7 @@ public class BigDecimalColumnTest {
   BigDecimalColumn obs = BigDecimalColumn.create("values", values);
   @Test
   public void testGetString() {
+    obs.setPrintFormatter(new BigDecimalColumnFormatter(NumberFormat.getNumberInstance(Locale.US)));
     assertEquals("12.1", obs.getString(3));
 
     // TODO is this what we should expect?
@@ -435,7 +433,8 @@ public class BigDecimalColumnTest {
 
   @Test
   public void testSetPrintFormatter() {
-    var formatter = new BigDecimalColumnFormatter(NumberFormat.getInstance());
+
+    var formatter = new BigDecimalColumnFormatter(NumberFormat.getNumberInstance(Locale.US));
     assertNotNull(formatter.getFormat(), "No format assigned");
     formatter.getFormat().setMinimumFractionDigits(3);
     obs.setPrintFormatter(formatter);
