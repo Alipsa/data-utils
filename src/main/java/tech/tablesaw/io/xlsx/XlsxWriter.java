@@ -68,8 +68,6 @@ public class XlsxWriter implements DataWriter<XlsxWriteOptions> {
 
           if (ColumnType.STRING.equals(type)) {
             cell.setCellValue(row.getString(colName));
-          } else if (ColumnType.TEXT.equals(type)) {
-            cell.setCellValue(row.getText(colName));
           } else if (ColumnType.LOCAL_DATE.equals(type)) {
             cell.setCellValue(row.getDate(colName));
             cell.setCellStyle(localDateStyle);
@@ -84,10 +82,14 @@ public class XlsxWriter implements DataWriter<XlsxWriteOptions> {
             ZonedDateTime zdt = ZonedDateTime.ofInstant(row.getInstant(colName), ZoneId.systemDefault());
             cell.setCellValue(GregorianCalendar.from(zdt));
             cell.setCellStyle(localDateTimeStyle);
-          } else if (ColumnType.FLOAT.equals(type)) {
-            cell.setCellValue(row.getFloat(colName));
+          } else if (ColumnType.SHORT.equals(type)) {
+            cell.setCellValue(row.getShort(colName));
           } else if (ColumnType.INTEGER.equals(type)) {
             cell.setCellValue(row.getInt(colName));
+          } else if (ColumnType.LONG.equals(type)) {
+            cell.setCellValue(row.getLong(colName));
+          } else if (ColumnType.FLOAT.equals(type)) {
+            cell.setCellValue(row.getFloat(colName));
           } else if (ColumnType.DOUBLE.equals(type)) {
             cell.setCellValue(row.getDouble(colName));
           } else if (ColumnType.BOOLEAN.equals(type)) {

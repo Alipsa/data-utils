@@ -16,7 +16,7 @@ repositories {
 }
 
 dependencies {
-    def groovyVersion = "[4.0.11, )"
+    def groovyVersion = "4.0.11"
     def tablesawVersion = "[0.43.1, )"
     // By using compileOnly instead of implementation, the jar will not be available at runtime
     // and hence users can use whatever compatible version of Groovy that they want

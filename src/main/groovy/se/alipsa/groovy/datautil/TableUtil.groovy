@@ -19,7 +19,6 @@ import tech.tablesaw.api.Table
 import tech.tablesaw.api.TimeColumn
 import tech.tablesaw.column.numbers.BigDecimalColumnType
 import tech.tablesaw.columns.Column
-import tech.tablesaw.columns.strings.AbstractStringColumn
 
 import java.math.RoundingMode
 import java.time.Instant
@@ -275,7 +274,7 @@ class TableUtil {
 
   static Class<?> classForColumnType(ColumnType type) {
     Class<?> typeClass = type.getClass()
-    if (AbstractStringColumn.class.isAssignableFrom(typeClass)) {
+    if (StringColumn.class.isAssignableFrom(typeClass)) {
       return String.class
     } else if (BooleanColumn.class.isAssignableFrom(typeClass)) {
       return Boolean.class
