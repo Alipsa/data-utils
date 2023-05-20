@@ -218,10 +218,11 @@ public class BigDecimalColumn extends NumberColumn<BigDecimalColumn, BigDecimal>
 
   /** {@inheritDoc} */
   @Override
+  @SuppressWarnings("unchecked")
   public BigDecimalColumn top(int n) {
     ObjectArrayList<BigDecimal> top = new ObjectArrayList<>();
     // parallelQuickSort cannot handle null values, but they make no sense to order anyway to we remove them
-    List<BigDecimal> cleaned = data.stream().filter(Objects::nonNull).collect(Collectors.toList());
+    List<BigDecimal> cleaned = data.stream().filter(Objects::nonNull).toList();
     BigDecimal[] values = cleaned.toArray(new BigDecimal[]{});
     ObjectArrays.parallelQuickSort(values, ObjectComparators.OPPOSITE_COMPARATOR);
     for (int i = 0; i < n && i < values.length; i++) {
