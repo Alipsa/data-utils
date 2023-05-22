@@ -12,6 +12,13 @@ import tech.tablesaw.table.Relation
 import java.util.stream.Collectors
 import java.util.stream.Stream
 
+/**
+ * This is an extansion of a Tablesaw Table adding some "grooviness" to Table e.g.
+ * <ol>
+ *   <li>Add a Map creation method to simplify programmatic creation of a Gtable</li>
+ *   <li>add getAt method allowing the shorthand syntax table[0,1] and table[0, 'columnName'] to retrieve data.
+ * </ol>
+ */
 class Gtable extends Table {
 
   private Gtable() {

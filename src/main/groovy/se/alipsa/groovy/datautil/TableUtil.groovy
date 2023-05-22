@@ -101,20 +101,6 @@ class TableUtil {
     return column
   }
 
-  static BigDecimal toBigDecimal(Object number) {
-    if (number == null) return null
-    if (number instanceof Integer
-        || number instanceof Long
-        || number instanceof Short
-        || number instanceof Byte) {
-      return BigDecimal.valueOf(number.longValue())
-    }
-    if (number instanceof BigInteger) {
-      return new BigDecimal((BigInteger) number)
-    }
-    return new BigDecimal(String.valueOf(number))
-  }
-
   static List<List<?>> toRowList(Table table) {
     List<List<?>> rowList = new ArrayList<>(table.rowCount())
     int ncol = table.columnCount()

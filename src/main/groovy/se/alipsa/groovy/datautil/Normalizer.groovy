@@ -6,9 +6,10 @@ import tech.tablesaw.api.FloatColumn
 
 import se.alipsa.groovy.matrix.Normalize
 
+/**
+ * This class provides various ways to normalize a Tablesaw column.
+ */
 class Normalizer {
-
-
 
   /**
    * Logarithmic transformations are used to normalize skewed distributions of continuous variables.

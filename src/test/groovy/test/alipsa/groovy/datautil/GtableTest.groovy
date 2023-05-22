@@ -3,11 +3,8 @@ package test.alipsa.groovy.datautil
 import org.junit.jupiter.api.Test
 import se.alipsa.groovy.datautil.gtable.Gtable
 import tech.tablesaw.api.ColumnType
-import tech.tablesaw.api.Row
 import tech.tablesaw.column.numbers.BigDecimalColumnType
 import tech.tablesaw.io.csv.CsvReadOptions
-
-import java.time.LocalDate
 
 import static org.junit.jupiter.api.Assertions.*
 import static se.alipsa.groovy.matrix.ListConverter.toLocalDates
@@ -88,7 +85,5 @@ class GtableTest {
     println(table)
     assertEquals(5, table.rowCount(), 'concat rowcount')
     assertEquals(6, table.columnCount(), 'concat columnCount')
-
-
   }
 }
