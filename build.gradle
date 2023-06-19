@@ -37,6 +37,7 @@ dependencies {
         }
     }
     implementation "se.alipsa.groovy:matrix:1.1.2-SNAPSHOT"
+    implementation "se.alipsa.groovy:matrix-stats:1.0.0-SNAPSHOT"
 
     // for XlsxWriter, TODO: remove once contributed to tablesaw
     implementation 'org.apache.poi:poi-ooxml:5.2.3'
