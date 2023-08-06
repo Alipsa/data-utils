@@ -49,11 +49,14 @@ Maven:
 
 ## Version history
 
-### 1.0.4
+### 1.0.5, in progress
+- upgrade Tablesaw dependency overrides
+
+### 1.0.4, 2023.08-06
 - upgrade to jdk17
 - add conversions to/from Tablesaw and Matrix
 - add wrappers to Gtable for all Table methods returning a Table
-- move most of Normalization code to the Matrix-stats package and adjust accordingly
+- move most of the Normalization code to the Matrix-stats package and adjust accordingly
 - upgrade dependencies for groovy, tablesaw, SODS, dom4j
 
 ### 1.0.3, 2022-12-24
