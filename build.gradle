@@ -30,11 +30,11 @@ dependencies {
     compileOnly "org.apache.groovy:groovy-sql:${groovyVersion}"
     implementation("tech.tablesaw:tablesaw-core:${tablesawVersion}") {
         constraints {
-            implementation "io.github.classgraph:classgraph:4.8.158"
+            implementation "io.github.classgraph:classgraph:4.8.161"
             because "Fix CWE-611: Improper Restriction of XML External Entity Reference ('XXE')"
         }
         constraints {
-            implementation "com.google.guava:guava:31.1-jre"
+            implementation "com.google.guava:guava:32.1.2-jre"
             because "Fix CWE-379: Creation of Temporary File in Directory with Incorrect Permissions"
         }
     }
