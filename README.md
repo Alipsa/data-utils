@@ -1,6 +1,6 @@
 # data-utils
 Groovy data utils. The main issue I needed to address was the reliance on System classloader in @Grab to handle JDBC drivers.
-This is very inconvenient when using an IDE such as [Gride](/perNyfelt/gride) as it requires you to copy jars to the Gride lib folder and
+This is very inconvenient when using an IDE such as [Gade](/Alipsa/gade) and [Ride](/Alipsa/ride) as it requires you to copy jars to the lib folder and
 restart the IDE in order for the System classpath to be updated.
 
 However, with some Reflection magic it is possible to do without this. This is what se.alipsa.groovy.datautil.SqlUtil does.
@@ -35,7 +35,7 @@ data-utils is available from maven central
 
 Groovy:
 ```groovy
-implementation "se.alipsa.groovy:data-utils:1.0.3"
+implementation "se.alipsa.groovy:data-utils:1.0.4"
 ```
 
 Maven:
@@ -43,7 +43,7 @@ Maven:
 <dependency>
     <groupId>se.alipsa.groovy</groupId>
     <artifactId>data-utils</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
 </dependency>
 ```
 
