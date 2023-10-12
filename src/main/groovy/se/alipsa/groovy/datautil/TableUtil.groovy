@@ -101,8 +101,8 @@ class TableUtil {
     return column
   }
 
-  static List<List<?>> toRowList(Table table) {
-    List<List<?>> rowList = new ArrayList<>(table.rowCount())
+  static List<List<Object>> toRowList(Table table) {
+    List<List<Object>> rowList = new ArrayList<>(table.rowCount())
     int ncol = table.columnCount()
     for (Row row : table) {
       List<Object> r = new ArrayList<>()
