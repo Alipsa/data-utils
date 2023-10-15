@@ -86,4 +86,21 @@ class GtableTest {
     assertEquals(5, table.rowCount(), 'concat rowcount')
     assertEquals(6, table.columnCount(), 'concat columnCount')
   }
+
+  @Test
+  void testSHortHandPut() {
+    def empData = [
+        emp_id: 1..5,
+        emp_name: ["Rick","Dan","Michelle","Ryan","Gary"],
+        salary: [623.3,515.2,611.0,729.0,843.25],
+        start_date: toLocalDates("2012-01-01", "2013-09-23", "2014-11-15", "2014-05-11", "2015-03-27")
+    ]
+    Gtable table = Gtable.create(empData, [INTEGER, STRING, DOUBLE, LOCAL_DATE])
+    assertEquals(5, table.rowCount(), "number of rows")
+    assertEquals(4, table.columnCount(), "number of columns")
+    table[4, 1] = "Sven"
+    assertEquals("Sven", table[4, 1])
+    table[4, "salary"] = 123.10
+    assertEquals(123.10, table[4, "salary"])
+  }
 }

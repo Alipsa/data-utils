@@ -1,14 +1,20 @@
 package se.alipsa.groovy.datautil.gtable
 
 import se.alipsa.groovy.datautil.TableUtil
+import se.alipsa.groovy.matrix.Matrix
 import tech.tablesaw.api.CategoricalColumn
 import tech.tablesaw.api.ColumnType
 import tech.tablesaw.api.NumericColumn
 import tech.tablesaw.api.Row
 import tech.tablesaw.api.Table
+import tech.tablesaw.column.numbers.BigDecimalColumnType
 import tech.tablesaw.columns.Column
 import tech.tablesaw.table.Relation
 
+import java.time.Instant
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
 import java.util.stream.Collectors
 import java.util.stream.Stream
 
@@ -16,7 +22,8 @@ import java.util.stream.Stream
  * This is an extansion of a Tablesaw Table adding some "grooviness" to Table e.g.
  * <ol>
  *   <li>Add a Map creation method to simplify programmatic creation of a Gtable</li>
- *   <li>add getAt method allowing the shorthand syntax table[0,1] and table[0, 'columnName'] to retrieve data.
+ *   <li>add getAt method allowing the shorthand syntax table[0,1] and table[0, 'columnName'] to retrieve data.</li>
+ *   <li>add putAt method allowing the shorthand syntax table[0,1] = 12 and table[0, 'columnName'] = 'foo' to change data.</li>
  * </ol>
  */
 class Gtable extends Table {
@@ -144,6 +151,23 @@ class Gtable extends Table {
     return column(name)
   }
 
+  void putAt(List args, Object value) {
+    def rowIndex = args[0] as Integer
+    def col = args[1]
+    Integer colIndex
+    if (col instanceof Number) {
+      colIndex = col.intValue()
+    } else {
+      colIndex = columnIndex(String.valueOf(col))
+    }
+    putAt(rowIndex, colIndex, value)
+  }
+
+  void putAt(int rowIndex, int columnIndex, Object value) {
+    def v = value.asType(asJavaClass(columnIndex))
+    column(columnIndex).set(rowIndex, v)
+  }
+
   static GdataFrameReader read() {
     return new GdataFrameReader(defaultReaderRegistry)
   }
@@ -264,7 +288,55 @@ class Gtable extends Table {
     return create(super.cast())
   }
 
+  Object asType(Class clazz) {
+    if (clazz == Matrix) {
+      return TableUtil.fromTablesaw(this)
+    }
+    super.asType(clazz)
+  }
+
   GdataFrameJoiner joinOn(String... columnNames) {
     return new GdataFrameJoiner(this, columnNames)
+  }
+
+  Class asJavaClass(int columnIndex) {
+    def columnType = column(columnIndex).type()
+    if (columnType == ColumnType.BOOLEAN) {
+      return Boolean
+    }
+    if (columnType == ColumnType.DOUBLE) {
+      return Double
+    }
+    if (columnType == ColumnType.FLOAT) {
+      return Float
+    }
+    if (columnType == ColumnType.INSTANT) {
+      return Instant
+    }
+    if (columnType == ColumnType.INTEGER) {
+      return Integer
+    }
+    if (columnType == ColumnType.LOCAL_DATE) {
+      return LocalDate
+    }
+    if (columnType == ColumnType.LOCAL_DATE_TIME) {
+      return LocalDateTime
+    }
+    if (columnType == ColumnType.LOCAL_TIME) {
+      return LocalTime
+    }
+    if (columnType == ColumnType.LONG) {
+      return Long
+    }
+    if (columnType == ColumnType.SHORT) {
+      return Short
+    }
+    if (columnType == ColumnType.STRING) {
+      return String
+    }
+    if (columnType == BigDecimalColumnType.instance()) {
+      return BigDecimal
+    }
+    return Object
   }
 }

@@ -51,6 +51,7 @@ Maven:
 
 ### 1.0.5, in progress
 - upgrade Tablesaw dependency overrides
+- add putAt method allowing the shorthand syntax `table[0,1] = 12` and `table[0, 'columnName'] = 'foo'` to change data.
 
 ### 1.0.4, 2023.08-06
 - upgrade to jdk17
