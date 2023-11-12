@@ -1,6 +1,7 @@
 package se.alipsa.groovy.datautil.gtable
 
 import se.alipsa.groovy.datautil.TableUtil
+import se.alipsa.groovy.matrix.Grid
 import se.alipsa.groovy.matrix.Matrix
 import tech.tablesaw.api.CategoricalColumn
 import tech.tablesaw.api.ColumnType
@@ -291,6 +292,8 @@ class Gtable extends Table {
   Object asType(Class clazz) {
     if (clazz == Matrix) {
       return TableUtil.fromTablesaw(this)
+    } else if (clazz == Grid) {
+      return new Grid(TableUtil.toRowList(this))
     }
     super.asType(clazz)
   }

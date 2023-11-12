@@ -280,7 +280,7 @@ class SqlUtil {
      * @param caller the calling class (i.e. the class which executed Grab, usually this.getClass())
      * @return An instance of the Driver class specified
      * @throws ClassNotFoundException if the class cannot be found from any of the classloaders
-     * @throws NoSuchMethodException if a non empty constuctor does not exist
+     * @throws NoSuchMethodException if a non empty constructor does not exist
      * @throws InvocationTargetException if a new instance cannot be created
      * @throws InstantiationException if a new instance cannot be created
      * @throws IllegalAccessException if a new instance cannot be created
@@ -314,7 +314,7 @@ class SqlUtil {
      * @param caller the calling instance (i.e. the object which executed Grab, usually this)
      * @return An instance of the Driver class specified
      * @throws ClassNotFoundException if the class cannot be found from any of the classloaders
-     * @throws NoSuchMethodException if a non empty constuctor does not exist
+     * @throws NoSuchMethodException if a non empty constructor does not exist
      * @throws InvocationTargetException if a new instance cannot be created
      * @throws InstantiationException if a new instance cannot be created
      * @throws IllegalAccessException if a new instance cannot be created

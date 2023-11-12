@@ -8,7 +8,7 @@ However, with some Reflection magic it is possible to do without this. This is w
 Here is an example:
 
 ```groovy
-@Grab('se.alipsa.groovy:data-utils:1.0.3')
+@Grab('se.alipsa.groovy:data-utils:1.0.5')
 @Grab('org.postgresql:postgresql:42.4.0')
 
 import se.alipsa.groovy.datautil.SqlUtil
@@ -35,7 +35,7 @@ data-utils is available from maven central
 
 Groovy:
 ```groovy
-implementation "se.alipsa.groovy:data-utils:1.0.4"
+implementation "se.alipsa.groovy:data-utils:1.0.5"
 ```
 
 Maven:
@@ -43,7 +43,7 @@ Maven:
 <dependency>
     <groupId>se.alipsa.groovy</groupId>
     <artifactId>data-utils</artifactId>
-    <version>1.0.4</version>
+    <version>1.0.5</version>
 </dependency>
 ```
 
@@ -51,7 +51,8 @@ Maven:
 
 ### 1.0.5, in progress
 - upgrade Tablesaw dependency overrides
-- add putAt method allowing the shorthand syntax `table[0,1] = 12` and `table[0, 'columnName'] = 'foo'` to change data.
+- add putAt method in GTable allowing the shorthand syntax `table[0,1] = 12` and `table[0, 'columnName'] = 'foo'` to change data.
+- add possiblity to cast a GTable to a Grid
 
 ### 1.0.4, 2023.08-06
 - upgrade to jdk17
