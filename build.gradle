@@ -48,6 +48,7 @@ dependencies {
     // for XmlReader and writer, TODO: remove once contributed to tablesaw
     implementation 'org.dom4j:dom4j:2.1.4'
 
+    testImplementation "tech.tablesaw:tablesaw-json:${tablesawVersion}"
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
     testImplementation 'com.h2database:h2:2.2.224'
     testImplementation "org.slf4j:slf4j-simple:2.0.9"
