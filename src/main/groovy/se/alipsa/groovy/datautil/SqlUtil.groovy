@@ -185,6 +185,11 @@ class SqlUtil {
         return newInstance(url, user, password, driverClassName, caller.getClass())
     }
 
+    static Sql newInstance(String url, String user, String password, String driverClassName, ClassLoader classLoader) throws SQLException, ClassNotFoundException {
+        Driver driver = classLoader.loadClass(driverClassName).getDeclaredConstructor().newInstance() as Driver
+        return newInstance(url, user, password, driver)
+    }
+
     /**
      * Replacement for the groovy.sql.Sql.newInstance() static method that creates an instance of {@link groovy.sql.Sql}
      *

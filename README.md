@@ -52,7 +52,8 @@ Maven:
 ### 1.0.5, in progress
 - upgrade Tablesaw dependency overrides
 - add putAt method in GTable allowing the shorthand syntax `table[0,1] = 12` and `table[0, 'columnName'] = 'foo'` to change data.
-- add possiblity to cast a GTable to a Grid
+- add possibility to cast a GTable to a Grid
+- add support for getting a db type for a java class
 
 ### 1.0.4, 2023.08-06
 - upgrade to jdk17
