@@ -261,30 +261,32 @@ class TableUtil {
   static Class<?> classForColumnType(ColumnType type) {
     Class<?> typeClass = type.getClass()
     if (StringColumn.class.isAssignableFrom(typeClass)) {
-      return String.class
+      return String
     } else if (BooleanColumn.class.isAssignableFrom(typeClass)) {
-      return Boolean.class
+      return Boolean
     } else if (DateColumn.class.isAssignableFrom(typeClass)) {
-      return LocalDate.class
-    } else if (DateTimeColumn.class.isAssignableFrom(typeClass)) {
-      return LocalDateTime.class
-    } else if (InstantColumn.class.isAssignableFrom(typeClass)) {
-      return Instant.class
-    } else if (TimeColumn.class.isAssignableFrom(typeClass)) {
-      return LocalTime.class
-    } else if (BigDecimalColumn.class.isAssignableFrom(typeClass)) {
-      return BigDecimal.class
-    } else if (DoubleColumn.class.isAssignableFrom(typeClass)) {
-      return Double.class
-    } else if (FloatColumn.class.isAssignableFrom(typeClass)) {
+      return LocalDate
+    } else if (DateTimeColumn.isAssignableFrom(typeClass)) {
+      return LocalDateTime
+    } else if (InstantColumn.isAssignableFrom(typeClass)) {
+      return Instant
+    } else if (TimeColumn.isAssignableFrom(typeClass)) {
+      return LocalTime
+    } else if (BigDecimalColumn.isAssignableFrom(typeClass)) {
+      return BigDecimal
+    } else if (DoubleColumn.isAssignableFrom(typeClass)) {
+      return Double
+    } else if (FloatColumn.isAssignableFrom(typeClass)) {
       return Float.class
-    } else if (IntColumn.class.isAssignableFrom(typeClass)) {
-      return Integer.class
-    } else if (LongColumn.class.isAssignableFrom(typeClass)) {
-      return Long.class
-    } else if (ShortColumn.class.isAssignableFrom(typeClass)) {
-      return Short.class
-    } else {
+    } else if (IntColumn.isAssignableFrom(typeClass)) {
+      return Integer
+    } else if (LongColumn.isAssignableFrom(typeClass)) {
+      return Long
+    } else if (ShortColumn.isAssignableFrom(typeClass)) {
+      return Short
+    } else if (BigDecimalColumn.isAssignableFrom(typeClass)) {
+      return BigDecimal
+    }else {
       // it is some custom column type made outside the "official" tablesaw api
       return Object.class
     }
