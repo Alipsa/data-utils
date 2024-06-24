@@ -1,6 +1,7 @@
 package se.alipsa.groovy.datautil.sqltypes
 
 import se.alipsa.groovy.datautil.ConnectionInfo
+import se.alipsa.groovy.datautil.DataBaseProvider
 
 import java.sql.Time
 import java.sql.Timestamp
@@ -44,9 +45,14 @@ abstract class SqlTypeMapper {
   }
 
   static SqlTypeMapper create(String jdbcUrl) {
+    create (fromUrl(jdbcUrl))
+  }
+
+  static SqlTypeMapper create(DataBaseProvider provider) {
     SqlTypeMapper mapper
-    switch (fromUrl(jdbcUrl)) {
+    switch (provider) {
       case H2 -> mapper = new H2TypeMapper()
+      case POSTGRESQL -> mapper = new PostgresTypeMapper()
       default -> mapper = new DefaultTypeMapperMapper()
     }
     mapper
@@ -96,8 +102,7 @@ abstract class SqlTypeMapper {
       return typeForShort()
     }
     if (String == columnType) {
-      Integer varcharSize = sizeMap[VARCHAR_SIZE]
-      return typeForString(varcharSize)
+      return typeForString(sizeMap[VARCHAR_SIZE])
     }
     if (Time == columnType) {
       return typeForTime()

@@ -5,7 +5,7 @@ enum DataBaseProvider {
   UNKNOWN(''),
   H2('jdbc:h2:'),
   MSSQL('jdbc:sqlserver:'),
-  POSTGRESQL('jdbc:postgresql'),
+  POSTGRESQL('jdbc:postgresql:'),
   MYSQL('jdbc:mysql:'),
   MARIADB('jdbc:mariadb:'),
   DERBY('jdbc:derby:'),
