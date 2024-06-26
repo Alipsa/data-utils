@@ -102,4 +102,9 @@ class DefaultTypeMapperMapper extends SqlTypeMapper {
   String typeForTimestamp() {
     return "TIMESTAMP"
   }
+
+  @Override
+  String typeForByteArray() {
+    return 'VARBINARY'
+  }
 }

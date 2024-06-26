@@ -35,6 +35,7 @@ abstract class SqlTypeMapper {
   abstract String typeForString(Integer size)
   abstract String typeForTime()
   abstract String typeForTimestamp()
+  abstract String typeForByteArray()
 
   protected SqlTypeMapper() {
     // for subclasses only, users should use only the static create methods
@@ -53,6 +54,7 @@ abstract class SqlTypeMapper {
     switch (provider) {
       case H2 -> mapper = new H2TypeMapper()
       case POSTGRESQL -> mapper = new PostgresTypeMapper()
+      case MSSQL -> mapper = new SqlServerTypeMapper()
       default -> mapper = new DefaultTypeMapperMapper()
     }
     mapper
@@ -109,6 +111,9 @@ abstract class SqlTypeMapper {
     }
     if (Timestamp == columnType) {
       return typeForTimestamp()
+    }
+    if (byte[] == columnType) {
+      return typeForByteArray()
     }
     println("No match for $columnType, returning blob")
     return "BLOB"
