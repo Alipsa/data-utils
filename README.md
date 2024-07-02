@@ -26,10 +26,6 @@ SqlUtil.withInstance("jdbc:postgresql://localhost:5432/mydb", "dbUser", "dbPassw
 See [test.alipsa.groovy.datautil.SqlUtilTest](https://github.com/perNyfelt/data-utils/blob/master/src/test/groovy/test/alipsa/groovy/datautil/SqlUtilTest.groovy) 
 for more examples!
 
-The other thing are some complementary operations to deal with Tablesaw data, e.g. the ability to create frequency tables.
-See [test.alipsa.groovy.datautil.TableUtilTest](https://github.com/perNyfelt/data-utils/blob/master/src/test/groovy/test/alipsa/groovy/datautil/TableUtilTest.groovy)
-for usage examples!
-
 ## Using the dependency
 data-utils is available from maven central
 
@@ -50,9 +46,7 @@ Maven:
 ## Version history
 
 ### 1.0.5, in progress
-- upgrade Tablesaw dependency overrides
-- add putAt method in GTable allowing the shorthand syntax `table[0,1] = 12` and `table[0, 'columnName'] = 'foo'` to change data.
-- add possibility to cast a GTable to a Grid
+- move Tablesaw stuff to matrix-tablesaw
 - add support for getting a db type for a java class
 
 ### 1.0.4, 2023.08-06
