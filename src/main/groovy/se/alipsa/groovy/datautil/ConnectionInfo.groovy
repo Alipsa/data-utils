@@ -113,6 +113,17 @@ class ConnectionInfo implements Comparable<ConnectionInfo> {
     }
   }
 
+  Properties getProperties() {
+    var props = new Properties()
+    if (user != null) {
+      props.setProperty("user", user)
+    }
+    if (password != null) {
+      props.setProperty("password", password)
+    }
+    props
+  }
+
   String asJson() {
     String pwd = password == null ? "" : password.replaceAll(".", "*");
     return "{" +

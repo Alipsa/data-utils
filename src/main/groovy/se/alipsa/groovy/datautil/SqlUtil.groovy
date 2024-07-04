@@ -148,6 +148,14 @@ class SqlUtil {
         withInstance(url, driverClassName, caller.getClass(), c)
     }
 
+    static void withInstance(ConnectionInfo ci, @ClosureParams(value= SimpleType.class, options="groovy.sql.Sql") Closure c) throws SQLException, ClassNotFoundException {
+        if (ci.user == null) {
+            withInstance(ci.url, ci.driver, getCallingClass(), c)
+        } else {
+            withInstance(ci.url, ci.user, ci.password, ci.driver, getCallingClass(), c)
+        }
+    }
+
     /**
      * Replacement for the groovy.sql.Sql.newInstance() static method that creates an instance of {@link groovy.sql.Sql}
      *
@@ -271,6 +279,20 @@ class SqlUtil {
         } catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
             throw new ClassNotFoundException(e.getMessage());
         }
+    }
+
+    static Sql newInstance(ConnectionInfo connectionInfo, Class caller = SqlUtil.class) {
+        return new Sql(connect(connectionInfo, caller))
+    }
+
+    static Connection connect(String driverClass, String jdbcUrl, Properties props, Class caller = SqlUtil.class) {
+        Driver driver = driver(driverClass, caller)
+        driver.connect(jdbcUrl, props)
+    }
+
+    static Connection connect(ConnectionInfo connectionInfo, Class caller = SqlUtil.class) {
+        Driver driver = driver(connectionInfo.driver, caller)
+        driver.connect(connectionInfo.url, connectionInfo.properties)
     }
 
     /**

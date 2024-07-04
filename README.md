@@ -29,7 +29,7 @@ for more examples!
 ## Using the dependency
 data-utils is available from maven central
 
-Groovy:
+Gradle:
 ```groovy
 implementation "se.alipsa.groovy:data-utils:1.0.5"
 ```
@@ -47,6 +47,7 @@ Maven:
 
 ### 1.0.6, in progress
 - Change github repo references from perNyfelt to Alipsa
+- Add support for ConnectionInfo as param to Sql factory methods
 
 ### 1.0.5, 2024-07-04
 - move Tablesaw stuff to matrix-tablesaw

@@ -17,26 +17,19 @@ class SqlUtilTest {
 
     @BeforeAll
     static void init() {
-        def driver = SqlUtilTest.getClassLoader().loadClass(dbDriver).getDeclaredConstructor().newInstance() as Driver
-        def props = new Properties()
-        props.setProperty("user", dbUser)
-        props.setProperty("password", dbPasswd)
-        def conn = driver.connect(dbUrl, props)
-        def sql = new Sql(conn)
 
-        sql.execute '''
-            create table IF NOT EXISTS PROJECT  (
-                id integer not null primary key,
-                name varchar(50),
-                url varchar(100)
-            )
-        '''
-        sql.execute('delete from PROJECT')
-        sql.execute 'insert into PROJECT (id, name, url) values (?, ?, ?)', [10, 'Groovy', 'http://groovy.codehaus.org']
-        sql.execute 'insert into PROJECT (id, name, url) values (?, ?, ?)', [20, 'Alipsa', 'http://www.alipsa.se']
-
-        sql.close()
-        conn.close()
+        try (def sql = SqlUtil.newInstance(dbUrl, dbUser, dbPasswd, dbDriver, this.class)) {
+            sql.execute '''
+                create table IF NOT EXISTS PROJECT  (
+                    id integer not null primary key,
+                    name varchar(50),
+                    url varchar(100)
+                )
+            '''
+            sql.execute('delete from PROJECT')
+            sql.execute 'insert into PROJECT (id, name, url) values (?, ?, ?)', [10, 'Groovy', 'http://groovy.codehaus.org']
+            sql.execute 'insert into PROJECT (id, name, url) values (?, ?, ?)', [20, 'Alipsa', 'http://www.alipsa.se']
+        }
     }
 
     @Test
