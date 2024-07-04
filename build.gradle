@@ -11,7 +11,7 @@ plugins {
 }
 
 group = 'se.alipsa.groovy'
-version = '1.0.5'
+version = '1.0.6-SNAPSHOT'
 description = 'Extensions to Groovy SQL'
 
 repositories {
@@ -112,11 +112,11 @@ publishing {
             pom {
                 name = 'Groovy Data Utils'
                 description = "${project.description}"
-                url = "https://github.com/perNyfelt/data-utils"
+                url = "https://github.com/Alipsa/data-utils"
                 licenses {
                     license {
                         name = 'MIT License'
-                        url = 'https://raw.githubusercontent.com/perNyfelt/data-utils/master/LICENSE'
+                        url = 'https://raw.githubusercontent.com/Alipsa/data-utils/master/LICENSE'
                     }
                 }
                 developers {
@@ -126,9 +126,9 @@ publishing {
                     }
                 }
                 scm {
-                    url = 'https://github.com/perNyfelt/data-utils/tree/master'
-                    connection = 'scm:git:https://github.com/perNyfelt/data-utils.git'
-                    developerConnection = 'scm:git:https://github.com/perNyfelt/data-utils.git'
+                    url = 'https://github.com/Alipsa/data-utils/tree/master'
+                    connection = 'scm:git:https://github.com/Alipsa/data-utils.git'
+                    developerConnection = 'scm:git:https://github.com/Alipsa/data-utils.git'
                 }
             }
         }

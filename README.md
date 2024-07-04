@@ -45,6 +45,9 @@ Maven:
 
 ## Version history
 
+### 1.0.6, in progress
+- Change github repo references from perNyfelt to Alipsa
+
 ### 1.0.5, 2024-07-04
 - move Tablesaw stuff to matrix-tablesaw
 - add support for getting a db type for a java class
