@@ -1,11 +1,8 @@
 package se.alipsa.groovy.datautil;
 
-import org.apache.logging.log4j.LogManager
-import org.apache.logging.log4j.Logger
-
 class ConnectionInfo implements Comparable<ConnectionInfo> {
 
-  private static final Logger log = LogManager.getLogger(ConnectionInfo.class);
+  //private static final Logger log = LogManager.getLogger(ConnectionInfo.class)
 
   private String name
 
@@ -15,10 +12,10 @@ class ConnectionInfo implements Comparable<ConnectionInfo> {
   private String user
   private String password
 
-  public ConnectionInfo() {
+  ConnectionInfo() {
   }
 
-  public ConnectionInfo(String name, String dependency, String driver, String url, String user, String password) {
+  ConnectionInfo(String name, String dependency, String driver, String url, String user, String password) {
     this.name = name
     this.dependency = dependency
     this.driver = driver
@@ -27,7 +24,7 @@ class ConnectionInfo implements Comparable<ConnectionInfo> {
     this.password = password
   }
 
-  public ConnectionInfo(ConnectionInfo ci) {
+  ConnectionInfo(ConnectionInfo ci) {
     this.name = ci.getName()
     this.dependency = ci.getDependency()
     this.driver = ci.getDriver()

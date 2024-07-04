@@ -48,6 +48,7 @@ Maven:
 ### 1.0.5, in progress
 - move Tablesaw stuff to matrix-tablesaw
 - add support for getting a db type for a java class
+- remove dependency on log4j to slim down the library further and be logging agnostic
 
 ### 1.0.4, 2023.08-06
 - upgrade to jdk17
