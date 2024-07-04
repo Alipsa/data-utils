@@ -45,12 +45,12 @@ Maven:
 
 ## Version history
 
-### 1.0.5, in progress
+### 1.0.5, 2024-07-04
 - move Tablesaw stuff to matrix-tablesaw
 - add support for getting a db type for a java class
 - remove dependency on log4j to slim down the library further and be logging agnostic
 
-### 1.0.4, 2023.08-06
+### 1.0.4, 2023-08-06
 - upgrade to jdk17
 - add conversions to/from Tablesaw and Matrix
 - add wrappers to Gtable for all Table methods returning a Table
