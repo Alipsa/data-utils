@@ -2,7 +2,7 @@ package se.alipsa.groovy.datautil
 
 enum DataBaseProvider {
 
-  UNKNOWN(''),
+  UNKNOWN('unknown'),
   H2('jdbc:h2:'),
   MSSQL('jdbc:sqlserver:'),
   POSTGRESQL('jdbc:postgresql:'),
@@ -33,30 +33,32 @@ enum DataBaseProvider {
 
   static DataBaseProvider fromUrl(String url) {
     DataBaseProvider provider = findEnumMatch(url)
-    if (provider == H2 && url.contains('MODE=')) {
-      if (url.contains('MODE=DB2')) {
+    String ucUrl = url.toUpperCase()
+    if (provider == H2 && ucUrl.contains('MODE=')) {
+      if (ucUrl.contains('MODE=DB2')) {
         provider = DB2
-      } else if (url.contains('MODE=Derby')) {
+      } else if (ucUrl.contains('MODE=DERBY')) {
         provider = DERBY
-      } else if (url.contains('MODE=HSQLDB')) {
+      } else if (ucUrl.contains('MODE=HSQLDB')) {
         provider = HSQLDB
-      } else if (url.contains('MODE=MariaDB')) {
+      } else if (ucUrl.contains('MODE=MARIADB')) {
         provider = MARIADB
-      } else if (url.contains('MODE=MySQL')) {
+      } else if (ucUrl.contains('MODE=MYSQL')) {
         provider = MYSQL
-      } else if (url.contains('MODE=Oracle')) {
+      } else if (ucUrl.contains('MODE=ORACLE')) {
         provider = ORACLE
-      } else if (url.contains('MODE=PostgreSQL')) {
+      } else if (ucUrl.contains('MODE=POSTGRESQL')) {
         provider = POSTGRESQL
-      } else if (url.contains('MODE=MSSQLServer')) {
+      } else if (ucUrl.contains('MODE=MSSQLSERVER')) {
         provider = MSSQL
       }
     }
     provider
   }
 
-  private static DataBaseProvider findEnumMatch(String url) {
+  static DataBaseProvider findEnumMatch(String url) {
     for (DataBaseProvider db : values()) {
+      //println "${url.startsWith(db.urlStart)} ${db.urlStart} in url"
       if (url.startsWith(db.urlStart)) {
         return db
       }
