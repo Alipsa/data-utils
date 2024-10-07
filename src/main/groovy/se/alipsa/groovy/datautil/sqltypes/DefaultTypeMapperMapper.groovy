@@ -1,5 +1,7 @@
 package se.alipsa.groovy.datautil.sqltypes
 
+import java.sql.Types
+
 class DefaultTypeMapperMapper extends SqlTypeMapper {
 
 
@@ -43,27 +45,32 @@ class DefaultTypeMapperMapper extends SqlTypeMapper {
   }
 
   @Override
-  def typeForFloat() {
+  String typeForFloat() {
     return "REAL"
   }
 
   @Override
-  def typeForInstant() {
+  String typeForInstant() {
     return "TIMESTAMP"
   }
 
   @Override
-  def typeForInteger() {
+  String typeForInteger() {
     return "INTEGER"
   }
 
   @Override
-  def typeForLocalDate() {
+  String typeForDate() {
     return "DATE"
   }
 
   @Override
-  def typeForLocalTime() {
+  String typeForLocalDate() {
+    return "DATE"
+  }
+
+  @Override
+  String typeForLocalTime() {
     return "TIME"
   }
 
@@ -106,5 +113,110 @@ class DefaultTypeMapperMapper extends SqlTypeMapper {
   @Override
   String typeForByteArray() {
     return 'VARBINARY'
+  }
+
+  @Override
+  String typeForZonedDateTime() {
+    return 'TIMESTAMP WITH TIME ZONE'
+  }
+
+  @Override
+  int jdbcTypeForBigDecimal() {
+    Types.NUMERIC
+  }
+
+  @Override
+  int jdbcTypeForBigInteger() {
+    Types.BIGINT
+  }
+
+  @Override
+  int jdbcTypeForBoolean() {
+    Types.BIT
+  }
+
+  @Override
+  int jdbcTypeForByte() {
+    Types.TINYINT
+  }
+
+  @Override
+  int jdbcTypeForCharacter() {
+    Types.CHAR
+  }
+
+  @Override
+  int jdbcTypeForDouble() {
+    Types.DOUBLE
+  }
+
+  @Override
+  int jdbcTypeForFloat() {
+    Types.REAL
+  }
+
+  @Override
+  int jdbcTypeForInstant() {
+    Types.TIMESTAMP
+  }
+
+  @Override
+  int jdbcTypeForInteger() {
+    Types.INTEGER
+  }
+
+  @Override
+  int jdbcTypeForDate() {
+    return Types.DATE
+  }
+
+  @Override
+  int jdbcTypeForLocalDate() {
+    Types.DATE
+  }
+
+  @Override
+  int jdbcTypeForLocalTime() {
+    Types.TIME
+  }
+
+  @Override
+  int jdbcTypeForLocalDateTime() {
+    Types.TIMESTAMP
+  }
+
+  @Override
+  int jdbcTypeForLong() {
+    Types.BIGINT
+  }
+
+  @Override
+  int jdbcTypeForShort() {
+    Types.SMALLINT
+  }
+
+  @Override
+  int jdbcTypeForString() {
+    Types.VARCHAR
+  }
+
+  @Override
+  int jdbcTypeForTime() {
+    Types.TIME
+  }
+
+  @Override
+  int jdbcTypeForTimestamp() {
+    Types.TIMESTAMP
+  }
+
+  @Override
+  int jdbcTypeForByteArray() {
+    Types.VARBINARY
+  }
+
+  @Override
+  int jdbcTypeForZonedDateTime() {
+    Types.TIMESTAMP_WITH_TIMEZONE
   }
 }

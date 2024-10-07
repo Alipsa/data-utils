@@ -3,13 +3,17 @@ package se.alipsa.groovy.datautil.sqltypes
 import se.alipsa.groovy.datautil.ConnectionInfo
 import se.alipsa.groovy.datautil.DataBaseProvider
 
+import java.sql.Date
 import java.sql.Time
 import java.sql.Timestamp
+import java.sql.Types
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
+import java.time.ZonedDateTime
 
+import static java.sql.Types.VARCHAR
 import static se.alipsa.groovy.datautil.DataBaseProvider.*
 
 abstract class SqlTypeMapper {
@@ -23,12 +27,13 @@ abstract class SqlTypeMapper {
   abstract String typeForBoolean()
   abstract String typeForByte()
   abstract String typeForCharacter()
+  abstract String typeForDate()
   abstract String typeForDouble()
-  abstract typeForFloat()
-  abstract typeForInstant()
-  abstract typeForInteger()
-  abstract typeForLocalDate()
-  abstract typeForLocalTime()
+  abstract String typeForFloat()
+  abstract String typeForInstant()
+  abstract String typeForInteger()
+  abstract String typeForLocalDate()
+  abstract String typeForLocalTime()
   abstract String typeForLocalDateTime()
   abstract String typeForLong()
   abstract String typeForShort()
@@ -36,6 +41,28 @@ abstract class SqlTypeMapper {
   abstract String typeForTime()
   abstract String typeForTimestamp()
   abstract String typeForByteArray()
+  abstract String typeForZonedDateTime()
+
+  abstract int jdbcTypeForBigDecimal()
+  abstract int jdbcTypeForBigInteger()
+  abstract int jdbcTypeForBoolean()
+  abstract int jdbcTypeForByte()
+  abstract int jdbcTypeForCharacter()
+  abstract int jdbcTypeForDouble()
+  abstract int jdbcTypeForFloat()
+  abstract int jdbcTypeForInstant()
+  abstract int jdbcTypeForInteger()
+  abstract int jdbcTypeForDate()
+  abstract int jdbcTypeForLocalDate()
+  abstract int jdbcTypeForLocalTime()
+  abstract int jdbcTypeForLocalDateTime()
+  abstract int jdbcTypeForLong()
+  abstract int jdbcTypeForShort()
+  abstract int jdbcTypeForString()
+  abstract int jdbcTypeForTime()
+  abstract int jdbcTypeForTimestamp()
+  abstract int jdbcTypeForByteArray()
+  abstract int jdbcTypeForZonedDateTime()
 
   protected SqlTypeMapper() {
     // for subclasses only, users should use only the static create methods
@@ -112,10 +139,43 @@ abstract class SqlTypeMapper {
     if (Timestamp == columnType) {
       return typeForTimestamp()
     }
+    if (Date == columnType) {
+      return typeForDate()
+    }
     if (byte[] == columnType) {
       return typeForByteArray()
     }
+    if (ZonedDateTime == columnType) {
+      return typeForZonedDateTime()
+    }
     println("No match for $columnType, returning blob")
     return "BLOB"
+  }
+
+  int jdbcType(Class type) {
+    // Note: Order is important since Time and TimeStamp extends Date
+    return switch (type) {
+      case String -> jdbcTypeForString()
+      case byte[], Byte[] -> jdbcTypeForByteArray()
+      case boolean, Boolean -> jdbcTypeForBoolean()
+      case short, Short -> jdbcTypeForShort()
+      case int, Integer -> jdbcTypeForInteger()
+      case long, Long -> jdbcTypeForLong()
+      case BigInteger -> jdbcTypeForBigInteger()
+      case float, Float -> jdbcTypeForFloat()
+      case double, Double -> jdbcTypeForDouble()
+      case BigDecimal -> jdbcTypeForBigDecimal()
+      case Time -> jdbcTypeForTime()
+      case LocalTime -> jdbcTypeForLocalTime()
+      case Instant -> jdbcTypeForInstant()
+      case Timestamp -> jdbcTypeForTimestamp()
+      case LocalDateTime -> jdbcTypeForLocalDateTime()
+      case java.util.Date, Date -> jdbcTypeForDate()
+      case LocalDate -> jdbcTypeForLocalDate()
+      case ZonedDateTime -> jdbcTypeForZonedDateTime()
+      case char, Character -> jdbcTypeForCharacter()
+      case byte, Byte -> jdbcTypeForByte()
+      default -> Types.OTHER
+    }
   }
 }

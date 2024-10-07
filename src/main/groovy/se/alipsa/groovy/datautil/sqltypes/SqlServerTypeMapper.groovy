@@ -13,7 +13,7 @@ class SqlServerTypeMapper extends DefaultTypeMapperMapper {
   }
 
   @Override
-  def typeForInteger() {
+  String typeForInteger() {
     return "INT"
   }
 
