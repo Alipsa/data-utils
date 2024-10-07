@@ -11,11 +11,11 @@ class H2TypeMapper extends DefaultTypeMapperMapper {
   protected String typeForString(Integer size) {
     // Todo: consider adding support for json
     if (size == null) {
-      return 'VARCHAR'
+      return SqlType.VARCHAR.toString()
     }
     if (size > 1_000_000_000   ) {
-      return "CLOB($size)"
+      return "$SqlType.CLOB($size)"
     }
-    return "VARCHAR($size)"
+    return "$SqlType.VARCHAR($size)"
   }
 }

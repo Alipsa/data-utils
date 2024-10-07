@@ -6,14 +6,12 @@ import se.alipsa.groovy.datautil.DataBaseProvider
 import java.sql.Date
 import java.sql.Time
 import java.sql.Timestamp
-import java.sql.Types
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZonedDateTime
 
-import static java.sql.Types.VARCHAR
 import static se.alipsa.groovy.datautil.DataBaseProvider.*
 
 abstract class SqlTypeMapper {
@@ -85,6 +83,10 @@ abstract class SqlTypeMapper {
       default -> mapper = new DefaultTypeMapperMapper()
     }
     mapper
+  }
+
+  String sqlType(Class<?> columnType) {
+    sqlType(columnType, [:])
   }
 
   String sqlType(Class columnType, Map<String, Integer> sizeMap) {
@@ -175,7 +177,7 @@ abstract class SqlTypeMapper {
       case ZonedDateTime -> jdbcTypeForZonedDateTime()
       case char, Character -> jdbcTypeForCharacter()
       case byte, Byte -> jdbcTypeForByte()
-      default -> Types.OTHER
+      default -> SqlType.OTHER.jdbcType
     }
   }
 }
