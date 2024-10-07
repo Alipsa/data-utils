@@ -3,22 +3,22 @@ package se.alipsa.groovy.datautil.sqltypes
 class SqlServerTypeMapper extends DefaultTypeMapperMapper {
 
   @Override
-  String typeForTimestamp() {
+  protected String typeForTimestamp() {
     return 'datetime2(3)'
   }
 
   @Override
-  String typeForDouble() {
+  protected String typeForDouble() {
     return 'FLOAT'
   }
 
   @Override
-  String typeForInteger() {
+  protected String typeForInteger() {
     return "INT"
   }
 
   @Override
-  String typeForLocalDateTime() {
+  protected String typeForLocalDateTime() {
     return "datetime2"
   }
 }
