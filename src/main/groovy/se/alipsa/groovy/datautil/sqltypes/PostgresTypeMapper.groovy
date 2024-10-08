@@ -8,6 +8,11 @@ class PostgresTypeMapper extends DefaultTypeMapperMapper {
   }
 
   @Override
+  protected int jdbcTypeForByte() {
+    SqlType.SMALLINT.jdbcType
+  }
+
+  @Override
   protected String typeForString(Integer size) {
     if (size == null) {
       return SqlType.VARCHAR.toString()

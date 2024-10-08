@@ -8,8 +8,18 @@ class SqlServerTypeMapper extends DefaultTypeMapperMapper {
   }
 
   @Override
+  protected int jdbcTypeForTimestamp() {
+    return SqlType.OTHER.jdbcType
+  }
+
+  @Override
   protected String typeForDouble() {
     return SqlType.FLOAT.toString()
+  }
+
+  @Override
+  protected int jdbcTypeForDouble() {
+    return SqlType.FLOAT.jdbcType
   }
 
   @Override
@@ -20,6 +30,11 @@ class SqlServerTypeMapper extends DefaultTypeMapperMapper {
   @Override
   protected String typeForLocalDateTime() {
     return "datetime2"
+  }
+
+  @Override
+  protected int jdbcTypeForLocalDateTime() {
+    return SqlType.OTHER.jdbcType
   }
 
   @Override
@@ -44,5 +59,10 @@ class SqlServerTypeMapper extends DefaultTypeMapperMapper {
       value += ')'
     }
     value
+  }
+
+  @Override
+  protected int jdbcTypeForBigDecimal() {
+    SqlType.DECIMAL.jdbcType
   }
 }
