@@ -45,14 +45,13 @@ Maven:
 
 ## Version history
 
-### 1.0.6, in progress
+### 1.0.6, 2024-10-11
 - Change github repo references from perNyfelt to Alipsa
 - Add support for ConnectionInfo as param to Sql factory methods
 - upgrade test dependencies and gradle version
 - fix bug in determining the DataBaseProvider from a URL
 - Add support for handling java.sql.Types and a jdbcType in SqlTypeMapper
   that returns the Types int corresponding to the Java class
-- 
 
 ### 1.0.5, 2024-07-04
 - move Tablesaw stuff to matrix-tablesaw
