@@ -50,6 +50,9 @@ Maven:
 - Add support for ConnectionInfo as param to Sql factory methods
 - upgrade test dependencies and gradle version
 - fix bug in determining the DataBaseProvider from a URL
+- Add support for handling java.sql.Types and a jdbcType in SqlTypeMapper
+  that returns the Types int corresponding to the Java class
+- 
 
 ### 1.0.5, 2024-07-04
 - move Tablesaw stuff to matrix-tablesaw

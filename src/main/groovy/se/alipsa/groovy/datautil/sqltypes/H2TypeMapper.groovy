@@ -3,19 +3,19 @@ package se.alipsa.groovy.datautil.sqltypes
 class H2TypeMapper extends DefaultTypeMapperMapper {
 
   @Override
-  String typeForBigDecimal(Integer precision, Integer scale) {
+  protected String typeForBigDecimal(Integer precision, Integer scale) {
     return "NUMBER"
   }
 
   @Override
-  String typeForString(Integer size) {
+  protected String typeForString(Integer size) {
     // Todo: consider adding support for json
     if (size == null) {
-      return 'VARCHAR'
+      return SqlType.VARCHAR.toString()
     }
     if (size > 1_000_000_000   ) {
-      return "CLOB($size)"
+      return "$SqlType.CLOB($size)"
     }
-    return "VARCHAR($size)"
+    return "$SqlType.VARCHAR($size)"
   }
 }

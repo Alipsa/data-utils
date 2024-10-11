@@ -4,9 +4,6 @@ import static org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import se.alipsa.groovy.datautil.SqlUtil
-import groovy.sql.Sql
-
-import java.sql.Driver
 
 class SqlUtilTest {
 
