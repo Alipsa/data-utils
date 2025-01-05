@@ -22,7 +22,7 @@ repositories {
 }
 
 dependencies {
-    def groovyVersion = "4.0.23"
+    def groovyVersion = "4.0.24"
     // By using compileOnly instead of implementation, the jar will not be available at runtime
     // and hence users can use whatever compatible version of Groovy that they want
     compileOnly "org.apache.groovy:groovy:${groovyVersion}"
