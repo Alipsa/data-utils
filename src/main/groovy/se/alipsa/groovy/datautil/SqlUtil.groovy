@@ -14,7 +14,7 @@ import java.sql.SQLException
  * using grab to connect to a database involves grabbing using the System Classloader which in many cases is problematic.
  * This works around the problem so that grab can be used "normally". e.g:
  * <code><pre>
- * @Grab('se.alipsa.groovy:data-utils:1.0-SNAPSHOT')
+ * @Grab('se.alipsa.groovy:data-utils:1.0.6')
  * @Grab('org.postgresql:postgresql:42.4.0')
  *
  * import se.alipsa.groovy.datautil.SqlUtil

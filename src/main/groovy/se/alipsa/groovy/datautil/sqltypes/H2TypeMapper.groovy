@@ -16,6 +16,6 @@ class H2TypeMapper extends DefaultTypeMapperMapper {
     if (size > 1_000_000_000   ) {
       return "$SqlType.CLOB($size)"
     }
-    return "$SqlType.VARCHAR($size)"
+    return "$SqlType.VARCHAR(${Math.max(size, 1)})"
   }
 }

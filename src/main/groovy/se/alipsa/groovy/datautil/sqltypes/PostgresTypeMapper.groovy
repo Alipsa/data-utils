@@ -20,6 +20,6 @@ class PostgresTypeMapper extends DefaultTypeMapperMapper {
     if (size > 8000) {
       return 'TEXT' // Maybe this should be CLOB?
     }
-    return "$SqlType.VARCHAR($size)"
+    return "$SqlType.VARCHAR(${Math.max(size, 1)})"
   }
 }

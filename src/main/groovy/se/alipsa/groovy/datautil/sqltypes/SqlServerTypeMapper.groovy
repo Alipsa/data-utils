@@ -45,7 +45,7 @@ class SqlServerTypeMapper extends DefaultTypeMapperMapper {
     if (size > 8000) {
       return "$SqlType.VARCHAR(max)" // Maybe this should be CLOB?
     }
-    return "$SqlType.VARCHAR($size)"
+    return "$SqlType.VARCHAR(${Math.max(size, 1)})"
   }
 
   @Override

@@ -124,6 +124,16 @@ class ConnectionInfo implements Comparable<ConnectionInfo> {
     props
   }
 
+  String getDependencyVersion() {
+    if (dependency == null) return null
+    def parts = dependency.split(':')
+    if (parts.length > 2) {
+      return parts[2]
+    } else {
+      return null
+    }
+  }
+
   String asJson() {
     String pwd = password == null ? "" : password.replaceAll(".", "*");
     return "{" +
