@@ -1,44 +1,44 @@
 package se.alipsa.groovy.datautil.sqltypes
 
-class SqlServerTypeMapper extends DefaultTypeMapperMapper {
+class SqlServerTypeMapper extends DefaultTypeMapper {
 
   @Override
-  protected String typeForTimestamp() {
+  String typeForTimestamp() {
     return 'datetime2(3)'
   }
 
   @Override
-  protected int jdbcTypeForTimestamp() {
+  int jdbcTypeForTimestamp() {
     return SqlType.OTHER.jdbcType
   }
 
   @Override
-  protected String typeForDouble() {
+  String typeForDouble() {
     return SqlType.FLOAT.toString()
   }
 
   @Override
-  protected int jdbcTypeForDouble() {
+  int jdbcTypeForDouble() {
     return SqlType.FLOAT.jdbcType
   }
 
   @Override
-  protected String typeForInteger() {
+  String typeForInteger() {
     return "INT"
   }
 
   @Override
-  protected String typeForLocalDateTime() {
+  String typeForLocalDateTime() {
     return "datetime2"
   }
 
   @Override
-  protected int jdbcTypeForLocalDateTime() {
+  int jdbcTypeForLocalDateTime() {
     return SqlType.OTHER.jdbcType
   }
 
   @Override
-  protected String typeForString(Integer size) {
+  String typeForString(Integer size) {
     if (size == null) {
       return SqlType.VARCHAR.toString()
     }
@@ -49,7 +49,7 @@ class SqlServerTypeMapper extends DefaultTypeMapperMapper {
   }
 
   @Override
-  protected String typeForBigDecimal(Integer precision, Integer scale) {
+  String typeForBigDecimal(Integer precision, Integer scale) {
     String value = SqlType.DECIMAL.toString()
     if (precision != null) {
       value += "($precision"
@@ -62,7 +62,7 @@ class SqlServerTypeMapper extends DefaultTypeMapperMapper {
   }
 
   @Override
-  protected int jdbcTypeForBigDecimal() {
+  int jdbcTypeForBigDecimal() {
     SqlType.DECIMAL.jdbcType
   }
 }

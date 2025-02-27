@@ -6,11 +6,7 @@ import se.alipsa.groovy.datautil.DataBaseProvider
 import java.sql.Date
 import java.sql.Time
 import java.sql.Timestamp
-import java.time.Instant
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.LocalTime
-import java.time.ZonedDateTime
+import java.time.*
 
 import static se.alipsa.groovy.datautil.DataBaseProvider.*
 
@@ -20,47 +16,91 @@ abstract class SqlTypeMapper {
   static final String DECIMAL_PRECISION = 'decimalPrecision'
   static final String DECIMAL_SCALE = 'decimalScale'
 
-  protected abstract String typeForBigDecimal(Integer precision, Integer scale)
-  protected abstract String typeForBigInteger()
-  protected abstract String typeForBoolean()
-  protected abstract String typeForByte()
-  protected abstract String typeForCharacter()
-  protected abstract String typeForDate()
-  protected abstract String typeForDouble()
-  protected abstract String typeForFloat()
-  protected abstract String typeForInstant()
-  protected abstract String typeForInteger()
-  protected abstract String typeForLocalDate()
-  protected abstract String typeForLocalTime()
-  protected abstract String typeForLocalDateTime()
-  protected abstract String typeForLong()
-  protected abstract String typeForShort()
-  protected abstract String typeForString(Integer size)
-  protected abstract String typeForTime()
-  protected abstract String typeForTimestamp()
-  protected abstract String typeForByteArray()
-  protected abstract String typeForZonedDateTime()
+  abstract String typeForBigDecimal(Integer precision, Integer scale)
 
-  protected abstract int jdbcTypeForBigDecimal()
-  protected abstract int jdbcTypeForBigInteger()
-  protected abstract int jdbcTypeForBoolean()
-  protected abstract int jdbcTypeForByte()
-  protected abstract int jdbcTypeForCharacter()
-  protected abstract int jdbcTypeForDouble()
-  protected abstract int jdbcTypeForFloat()
-  protected abstract int jdbcTypeForInstant()
-  protected abstract int jdbcTypeForInteger()
-  protected abstract int jdbcTypeForDate()
-  protected abstract int jdbcTypeForLocalDate()
-  protected abstract int jdbcTypeForLocalTime()
-  protected abstract int jdbcTypeForLocalDateTime()
-  protected abstract int jdbcTypeForLong()
-  protected abstract int jdbcTypeForShort()
-  protected abstract int jdbcTypeForString()
-  protected abstract int jdbcTypeForTime()
-  protected abstract int jdbcTypeForTimestamp()
-  protected abstract int jdbcTypeForByteArray()
-  protected abstract int jdbcTypeForZonedDateTime()
+  abstract String typeForBigInteger()
+
+  abstract String typeForBoolean()
+
+  abstract String typeForByte()
+
+  abstract String typeForCharacter()
+
+  abstract String typeForDate()
+
+  abstract String typeForDouble()
+
+  abstract String typeForFloat()
+
+  abstract String typeForInstant()
+
+  abstract String typeForInteger()
+
+  abstract String typeForLocalDate()
+
+  abstract String typeForLocalTime()
+
+  abstract String typeForLocalDateTime()
+
+  abstract String typeForLong()
+
+  abstract String typeForShort()
+
+  abstract String typeForString(Integer size)
+
+  abstract String typeForTime()
+
+  abstract String typeForTimestamp()
+
+  abstract String typeForByteArray()
+
+  abstract String typeForZonedDateTime()
+
+  abstract int jdbcTypeForBigDecimal()
+
+  abstract int jdbcTypeForBigInteger()
+
+  abstract int jdbcTypeForBoolean()
+
+  abstract int jdbcTypeForByte()
+
+  abstract int jdbcTypeForCharacter()
+
+  abstract int jdbcTypeForDouble()
+
+  abstract int jdbcTypeForFloat()
+
+  abstract int jdbcTypeForInstant()
+
+  abstract int jdbcTypeForInteger()
+
+  abstract int jdbcTypeForDate()
+
+  abstract int jdbcTypeForLocalDate()
+
+  abstract int jdbcTypeForLocalTime()
+
+  abstract int jdbcTypeForLocalDateTime()
+
+  abstract int jdbcTypeForLong()
+
+  abstract int jdbcTypeForShort()
+
+  abstract int jdbcTypeForString()
+
+  abstract int jdbcTypeForTime()
+
+  abstract int jdbcTypeForTimestamp()
+
+  abstract int jdbcTypeForByteArray()
+
+  abstract int jdbcTypeForZonedDateTime()
+
+  /**
+   * Handle conversion from non supported types in setObject
+   * e.g. LocalDate in Derby which ust be converted to java.sql.Date
+   */
+  abstract Object convertToDbValue(Object o)
 
   protected SqlTypeMapper() {
     // for subclasses only, users should use only the static create methods
@@ -71,7 +111,7 @@ abstract class SqlTypeMapper {
   }
 
   static SqlTypeMapper create(String jdbcUrl) {
-    create (fromUrl(jdbcUrl))
+    create(fromUrl(jdbcUrl))
   }
 
   static SqlTypeMapper create(DataBaseProvider provider) {
@@ -80,7 +120,8 @@ abstract class SqlTypeMapper {
       case H2 -> mapper = new H2TypeMapper()
       case POSTGRESQL -> mapper = new PostgresTypeMapper()
       case MSSQL -> mapper = new SqlServerTypeMapper()
-      default -> mapper = new DefaultTypeMapperMapper()
+      case DERBY -> mapper = new DerbyTypeMapper()
+      default -> mapper = new DefaultTypeMapper()
     }
     mapper
   }
@@ -120,7 +161,7 @@ abstract class SqlTypeMapper {
     if (LocalDate == columnType) {
       return typeForLocalDate()
     }
-    if(LocalTime == columnType) {
+    if (LocalTime == columnType) {
       return typeForLocalTime()
     }
     if (LocalDateTime == columnType) {

@@ -1,9 +1,9 @@
 package se.alipsa.groovy.datautil.sqltypes
 
-class DefaultTypeMapperMapper extends SqlTypeMapper {
+class DefaultTypeMapper extends SqlTypeMapper {
 
   @Override
-  protected String typeForBigDecimal(Integer precision, Integer scale) {
+  String typeForBigDecimal(Integer precision, Integer scale) {
     String value = SqlType.NUMERIC.toString()
     if (precision != null) {
       value += "($precision"
@@ -16,77 +16,77 @@ class DefaultTypeMapperMapper extends SqlTypeMapper {
   }
 
   @Override
-  protected String typeForBigInteger() {
+  String typeForBigInteger() {
     return SqlType.BIGINT.toString()
   }
 
   @Override
-  protected String typeForBoolean() {
+  String typeForBoolean() {
     return SqlType.BIT.toString()
   }
 
   @Override
-  protected String typeForByte() {
+  String typeForByte() {
     return SqlType.TINYINT.toString()
   }
 
   @Override
-  protected String typeForCharacter() {
+  String typeForCharacter() {
     return SqlType.CHAR.toString()
   }
 
   @Override
-  protected String typeForDouble() {
+  String typeForDouble() {
     return SqlType.DOUBLE.toString()
   }
 
   @Override
-  protected String typeForFloat() {
+  String typeForFloat() {
     return SqlType.REAL.toString()
   }
 
   @Override
-  protected String typeForInstant() {
+  String typeForInstant() {
     return SqlType.TIMESTAMP.toString()
   }
 
   @Override
-  protected String typeForInteger() {
+  String typeForInteger() {
     return SqlType.INTEGER.toString()
   }
 
   @Override
-  protected String typeForDate() {
+  String typeForDate() {
     return SqlType.DATE.toString()
   }
 
   @Override
-  protected String typeForLocalDate() {
+  String typeForLocalDate() {
     return SqlType.DATE.toString()
   }
 
   @Override
-  protected String typeForLocalTime() {
+  String typeForLocalTime() {
     return SqlType.TIME.toString()
   }
 
   @Override
-  protected String typeForLocalDateTime() {
+  String typeForLocalDateTime() {
     return SqlType.TIMESTAMP.toString()
   }
 
   @Override
-  protected String typeForLong() {
+  String typeForLong() {
     return SqlType.BIGINT.toString()
   }
 
   @Override
-  protected String typeForShort() {
+  String typeForShort() {
     return SqlType.SMALLINT.toString()
   }
 
   @Override
-  protected String typeForString(Integer size) {
+  String typeForString(Integer size) {
     if (size == null) {
       return SqlType.VARCHAR.toString()
     }
@@ -97,122 +97,127 @@ class DefaultTypeMapperMapper extends SqlTypeMapper {
   }
 
   @Override
-  protected String typeForTime() {
+  String typeForTime() {
     return SqlType.TIME.toString()
   }
 
   @Override
-  protected String typeForTimestamp() {
+  String typeForTimestamp() {
     return SqlType.TIMESTAMP.toString()
   }
 
   @Override
-  protected String typeForByteArray() {
+  String typeForByteArray() {
     return SqlType.VARBINARY.toString()
   }
 
   @Override
-  protected String typeForZonedDateTime() {
+  String typeForZonedDateTime() {
     return SqlType.TIMESTAMP_WITH_TIMEZONE.toString()
   }
 
   @Override
-  protected int jdbcTypeForBigDecimal() {
+  int jdbcTypeForBigDecimal() {
     SqlType.NUMERIC.jdbcType
   }
 
   @Override
-  protected int jdbcTypeForBigInteger() {
+  int jdbcTypeForBigInteger() {
     SqlType.BIGINT.jdbcType
   }
 
   @Override
-  protected int jdbcTypeForBoolean() {
+  int jdbcTypeForBoolean() {
     SqlType.BIT.jdbcType
   }
 
   @Override
-  protected int jdbcTypeForByte() {
+  int jdbcTypeForByte() {
     SqlType.TINYINT.jdbcType
   }
 
   @Override
-  protected int jdbcTypeForCharacter() {
+  int jdbcTypeForCharacter() {
     SqlType.CHAR.jdbcType
   }
 
   @Override
-  protected int jdbcTypeForDouble() {
+  int jdbcTypeForDouble() {
     SqlType.DOUBLE.jdbcType
   }
 
   @Override
-  protected int jdbcTypeForFloat() {
+  int jdbcTypeForFloat() {
     SqlType.REAL.jdbcType
   }
 
   @Override
-  protected int jdbcTypeForInstant() {
+  int jdbcTypeForInstant() {
     SqlType.TIMESTAMP.jdbcType
   }
 
   @Override
-  protected int jdbcTypeForInteger() {
+  int jdbcTypeForInteger() {
     SqlType.INTEGER.jdbcType
   }
 
   @Override
-  protected int jdbcTypeForDate() {
+  int jdbcTypeForDate() {
     SqlType.DATE.jdbcType
   }
 
   @Override
-  protected int jdbcTypeForLocalDate() {
+  int jdbcTypeForLocalDate() {
     SqlType.DATE.jdbcType
   }
 
   @Override
-  protected int jdbcTypeForLocalTime() {
+  int jdbcTypeForLocalTime() {
     SqlType.TIME.jdbcType
   }
 
   @Override
-  protected int jdbcTypeForLocalDateTime() {
+  int jdbcTypeForLocalDateTime() {
     SqlType.TIMESTAMP.jdbcType
   }
 
   @Override
-  protected int jdbcTypeForLong() {
+  int jdbcTypeForLong() {
     SqlType.BIGINT.jdbcType
   }
 
   @Override
-  protected int jdbcTypeForShort() {
+  int jdbcTypeForShort() {
     SqlType.SMALLINT.jdbcType
   }
 
   @Override
-  protected int jdbcTypeForString() {
+  int jdbcTypeForString() {
     SqlType.VARCHAR.jdbcType
   }
 
   @Override
-  protected int jdbcTypeForTime() {
+  int jdbcTypeForTime() {
     SqlType.TIME.jdbcType
   }
 
   @Override
-  protected int jdbcTypeForTimestamp() {
+  int jdbcTypeForTimestamp() {
     SqlType.TIMESTAMP.jdbcType
   }
 
   @Override
-  protected int jdbcTypeForByteArray() {
+  int jdbcTypeForByteArray() {
     SqlType.VARBINARY.jdbcType
   }
 
   @Override
-  protected int jdbcTypeForZonedDateTime() {
+  int jdbcTypeForZonedDateTime() {
     SqlType.TIMESTAMP_WITH_TIMEZONE.jdbcType
+  }
+
+  @Override
+  Object convertToDbValue(Object o) {
+    return o
   }
 }

@@ -43,4 +43,10 @@ class SqlTypeMapperTest {
     assertEquals(Types.TIMESTAMP, mapper.jdbcType(LocalDateTime))
     assertEquals(Types.TIMESTAMP, mapper.jdbcType(Timestamp))
   }
+
+  @Test
+  void testDerbyMapping() {
+    SqlTypeMapper mapper = SqlTypeMapper.create(DataBaseProvider.DERBY)
+    assertEquals("VARCHAR(32672) FOR BIT DATA", mapper.typeForByteArray())
+  }
 }

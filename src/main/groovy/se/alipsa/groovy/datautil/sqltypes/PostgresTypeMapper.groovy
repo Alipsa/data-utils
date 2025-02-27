@@ -1,19 +1,19 @@
 package se.alipsa.groovy.datautil.sqltypes
 
-class PostgresTypeMapper extends DefaultTypeMapperMapper {
+class PostgresTypeMapper extends DefaultTypeMapper {
 
   @Override
-  protected String typeForByte() {
+  String typeForByte() {
     return SqlType.SMALLINT.toString()
   }
 
   @Override
-  protected int jdbcTypeForByte() {
+  int jdbcTypeForByte() {
     SqlType.SMALLINT.jdbcType
   }
 
   @Override
-  protected String typeForString(Integer size) {
+  String typeForString(Integer size) {
     if (size == null) {
       return SqlType.VARCHAR.toString()
     }
