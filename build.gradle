@@ -11,7 +11,7 @@ plugins {
 }
 
 group = 'se.alipsa.groovy'
-version = '1.0.7-SNAPSHOT'
+version = '2.0.0-SNAPSHOT'
 description = 'Extensions to Groovy SQL'
 
 repositories {
@@ -36,14 +36,14 @@ dependencies {
     testImplementation "org.apache.groovy:groovy-sql:${groovyVersion}"
 }
 
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
-    }
+compileJava {
+    options.release = 21
+    options.deprecation = true
+    options.compilerArgs << "-Xlint:unchecked"
 }
 
-tasks.withType(JavaCompile) {
-    options.compilerArgs << "-Xlint:unchecked"
+compileGroovy {
+    options.deprecation = true
 }
 
 test {

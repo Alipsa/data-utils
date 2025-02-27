@@ -45,6 +45,15 @@ class ConnectionInfo implements Comparable<ConnectionInfo> {
     return dependency
   }
 
+  /**
+   * A dependency typically inludes one dependency in the gradle short format e.g.
+   * 'se.alipsa.matrix:matrix-stats:1.1.0'. However sometimes multiple dependencies are needed.
+   * If that is the case, you can separate the dependencies with a semicolon (;) e.g:
+   *"org.apache.derby:derby:10.17.1.0;org.apache.derby:derbytools:10.17.1.0;org.apache.derby:derbyshared:10.17.1.0"
+   *
+   * @param dependency the dependency or dependencies needed to dynamically fetch the driver
+   * from maven central and instantiate the driver
+   */
   void setDependency(String dependency) {
     this.dependency = dependency
   }

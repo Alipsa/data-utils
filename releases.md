@@ -1,6 +1,6 @@
 ## Version history
 
-### 1.0.7, in progress
+### 2.0.0, in progress
 - add getDependencyVersion method to ConnectionInfo
 - ensure size in varchar(size) is minimum 1 (was 0)
 - Improve support for Derby
@@ -8,6 +8,7 @@
 - Change scope of DefaultTypeMapper from protected to public in order to facilitate testing
 - Improve support for Derby, adding a mapper method for converting values when the db does not support it
 e.g. LocalDate inserts in Derby which must be converted to java.sql.Date for setObject to work.
+- Require JDK 21
 
 ### 1.0.6, 2024-10-11
 - Change github repo references from perNyfelt to Alipsa
