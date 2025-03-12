@@ -1,6 +1,6 @@
 ## Version history
 
-### 2.0.0, in progress
+### 2.0.0, 2025-03-12
 - add getDependencyVersion method to ConnectionInfo
 - ensure size in varchar(size) is minimum 1 (was 0)
 - Improve support for Derby
