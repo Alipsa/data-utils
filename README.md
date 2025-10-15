@@ -31,7 +31,7 @@ data-utils is available from maven central
 
 Gradle:
 ```groovy
-implementation "se.alipsa.groovy:data-utils:1.0.6"
+implementation "se.alipsa.groovy:data-utils:2.0.0"
 ```
 
 Maven:
@@ -39,7 +39,7 @@ Maven:
 <dependency>
     <groupId>se.alipsa.groovy</groupId>
     <artifactId>data-utils</artifactId>
-    <version>1.0.6</version>
+    <version>2.0.0</version>
 </dependency>
 ```
 

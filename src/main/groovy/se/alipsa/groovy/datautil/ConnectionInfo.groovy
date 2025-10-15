@@ -76,6 +76,9 @@ class ConnectionInfo implements Comparable<ConnectionInfo> {
 
   void setUrl(String url) {
     this.url = url
+    if (driver == null) {
+      setDriver(SqlUtil.getDriverClassName(url))
+    }
   }
 
   @Override
