@@ -2,33 +2,48 @@ package se.alipsa.groovy.datautil
 
 enum DataBaseProvider {
 
-  UNKNOWN('unknown'),
-  H2('jdbc:h2:'),
-  MSSQL('jdbc:sqlserver:'),
-  POSTGRESQL('jdbc:postgresql:'),
-  MYSQL('jdbc:mysql:'),
-  MARIADB('jdbc:mariadb:'),
-  DERBY('jdbc:derby:'),
-  HSQLDB('jdbc:hsqldb:'),
-  SQLLITE('jdbc:sqlite:'),
-  ORACLE('jdbc:oracle'),
-  DB2('jdbc:db2:'),
-  CLOUDSCAPE('jdbc:db2j:net:'),
-  INFORMIX('jdbc:ids:'),
-  SNOWFLAKE('jdbc:snowflake:'),
-  HIVE('jdbc:hive2:'),
-  TERADATA('jdbc:teradata:'),
-  SYBASE('jdbc:sybase:'),
-  SAP_HANA('jdbc:sap:')
+  UNKNOWN('unknown', null, null),
+  H2('jdbc:h2:', 'org.h2', 'h2'),
+  MSSQL('jdbc:sqlserver:', 'com.microsoft.sqlserver', 'mssql-jdbc'),
+  POSTGRESQL('jdbc:postgresql:', 'org.postgresql', 'postgresql'),
+  MYSQL('jdbc:mysql:', 'com.mysql', 'mysql-connector-j'),
+  MARIADB('jdbc:mariadb:', 'org.mariadb.jdbc', 'mariadb-java-client'),
+  DERBY('jdbc:derby:', 'org.apache.derby', 'derby'),
+  HSQLDB('jdbc:hsqldb:', 'org.hsqldb', 'hsqldb'),
+  SQLLITE('jdbc:sqlite:', 'org.sqlite', 'sqlite-jdbc'),
+  ORACLE('jdbc:oracle', 'com.oracle.database.jdbc', 'ojdbc11'),
+  DB2('jdbc:db2:', 'com.ibm.db2', 'jcc'),
+  INFORMIX('jdbc:ids:', 'com.ibm.informix', 'jdbc'),
+  SNOWFLAKE('jdbc:snowflake:', 'net.snowflake', 'snowflake-jdbc'),
+  HIVE('jdbc:hive2:', 'org.apache.hive', 'hive-jdbc'),
+  TERADATA('jdbc:teradata:', 'com.teradata.jdbc', 'terajdbc'),
+  SYBASE('jdbc:jtds:sybase:', 'net.sourceforge.jtds', 'jtds'),
+  SAP_HANA('jdbc:sap:', 'com.sap.cloud.db.jdbc', 'ngdbc')
 
   String urlStart
+  String dependencyGroupId
+  String dependencyArtifactId
 
-  DataBaseProvider(String urlStart) {
+  DataBaseProvider(String urlStart, String dependencyGroupId, String dependencyArtifactId) {
     this.urlStart = urlStart
+    this.dependencyGroupId = dependencyGroupId
+    this.dependencyArtifactId = dependencyArtifactId
   }
 
   String getUrlStart() {
     return urlStart
+  }
+
+  String getDependencyGroupId() {
+    return dependencyGroupId
+  }
+
+  String getDependencyArtifactId() {
+    return dependencyArtifactId
+  }
+
+  String getDependencyString() {
+    return "$dependencyGroupId:$dependencyArtifactId"
   }
 
   static DataBaseProvider fromUrl(String url) {
