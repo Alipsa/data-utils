@@ -458,6 +458,9 @@ class SqlUtil {
     if (lcUrl.startsWith(ORACLE.urlStart)) {
       return 'oracle.jdbc.OracleDriver'
     }
-    null
+    if (lcUrl.startsWith(H2.urlStart)) {
+      return 'org.h2.Driver'
+    }
+    throw new RuntimeException("Cannot determine driver class name from url: $url, please provide driver class name explicitly")
   }
 }

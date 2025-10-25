@@ -1,5 +1,9 @@
 ## Version history
 
+### 2.0.3, 2025-10-25
+- Fix getDriverClassName for h2 in SqlUtil
+- throw a RuntimeException when no driver class can be determined for a given url in SqlUtil.
+
 ### 2.0.2, 2025-10-25
 - Fix dependency for h2 for DatabaseProvider.H2
 
