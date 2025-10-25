@@ -1,5 +1,8 @@
 ## Version history
 
+### 2.0.2, 2025-10-25
+- Fix dependency for h2 for DatabaseProvider.H2
+
 ### 2.0.1, 2025-10-25
 - add methods that does not require driver class name but guesses them based on the url.
   - Set the driver class (if unset) when adding a url to connection info

@@ -3,7 +3,7 @@ package se.alipsa.groovy.datautil
 enum DataBaseProvider {
 
   UNKNOWN('unknown', null, null),
-  H2('jdbc:h2:', 'org.h2', 'h2'),
+  H2('jdbc:h2:', 'com.h2database', 'h2'),
   MSSQL('jdbc:sqlserver:', 'com.microsoft.sqlserver', 'mssql-jdbc'),
   POSTGRESQL('jdbc:postgresql:', 'org.postgresql', 'postgresql'),
   MYSQL('jdbc:mysql:', 'com.mysql', 'mysql-connector-j'),
