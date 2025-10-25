@@ -1,8 +1,9 @@
 ## Version history
 
-### 2.0.1, in progress
+### 2.0.1, 2025-10-25
 - add methods that does not require driver class name but guesses them based on the url.
   - Set the driver class (if unset) when adding a url to connection info
+- Add driver dependency info to DatabaseProvider enum
 - upgrade gradle to 9.0.1, upgrade test dependencies and plugins
 
 ### 2.0.0, 2025-03-12
