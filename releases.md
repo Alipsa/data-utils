@@ -1,5 +1,11 @@
 ## Version history
 
+### 2.0.4, in progress
+- Upgrade dependencies
+  - Groovy [5.0.1 -> 5.0.2]
+  - Junit Jupiter [5.14.0 -> 6.0.0]
+  - Junit platform launcher [1.14.0 -> 6.0.0]
+
 ### 2.0.3, 2025-10-25
 - Fix getDriverClassName for h2 in SqlUtil
 - throw a RuntimeException when no driver class can be determined for a given url in SqlUtil.

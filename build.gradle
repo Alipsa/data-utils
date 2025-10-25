@@ -11,7 +11,7 @@ plugins {
 }
 
 group = 'se.alipsa.groovy'
-version = '2.0.3'
+version = '2.0.4-SNAPSHOT'
 description = 'Extensions to Groovy SQL'
 
 repositories {
@@ -22,15 +22,15 @@ repositories {
 }
 
 dependencies {
-  def groovyVersion = "5.0.1"
+  def groovyVersion = "5.0.2"
   // By using compileOnly instead of implementation, the jar will not be available at runtime
   // and hence users can use whatever compatible version of Groovy that they want
   compileOnly "org.apache.groovy:groovy:${groovyVersion}"
   compileOnly "org.apache.groovy:groovy-sql:${groovyVersion}"
   //implementation 'org.apache.logging.log4j:log4j-api:2.23.1'
 
-  testImplementation 'org.junit.jupiter:junit-jupiter:5.14.0'
-  testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.14.0'
+  testImplementation 'org.junit.jupiter:junit-jupiter:6.0.0'
+  testRuntimeOnly 'org.junit.platform:junit-platform-launcher:6.0.0'
   testImplementation 'com.h2database:h2:2.4.240'
   testImplementation "org.apache.groovy:groovy:${groovyVersion}"
   testImplementation "org.apache.groovy:groovy-sql:${groovyVersion}"

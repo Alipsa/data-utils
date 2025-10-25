@@ -47,7 +47,7 @@ class SqlUtilTest {
   }
 
   @Test
-  void testExample() {
+  void testDriverFromUrl() {
 
     def idList = new ArrayList()
 
