@@ -1,4 +1,4 @@
-package se.alipsa.groovy.datautil;
+package se.alipsa.groovy.datautil
 
 class ConnectionInfo implements Comparable<ConnectionInfo> {
 
@@ -108,12 +108,15 @@ class ConnectionInfo implements Comparable<ConnectionInfo> {
   }
   @Override
   int compareTo(ConnectionInfo obj) {
-      return this.toString() <=> obj.toString();
+    if (obj == null) {
+      throw new NullPointerException("Cannot compare with null")
+    }
+    return this.toString() <=> obj.toString()
   }
 
   @Override
   int hashCode() {
-    return name.hashCode()
+    return name?.hashCode() ?: 0
   }
 
   @Override
@@ -147,14 +150,27 @@ class ConnectionInfo implements Comparable<ConnectionInfo> {
   }
 
   String asJson() {
-    String pwd = password == null ? "" : password.replaceAll(".", "*");
+    String pwd = password == null ? "" : password.replaceAll(".", "*")
     return "{" +
-        "\"name\"=\"" + name +
-        "\", \"driver\"=\"" + driver +
-        "\", \"url\"=\"" + url +
-        "\", \"user\"=" + user +
-        "\", \"password\"=\"" + pwd +
-        "\"}";
+        "\"name\":${jsonValue(name)}," +
+        "\"driver\":${jsonValue(driver)}," +
+        "\"url\":${jsonValue(url)}," +
+        "\"user\":${jsonValue(user)}," +
+        "\"password\":${jsonValue(pwd)}" +
+        "}"
+  }
+
+  private static String jsonValue(String value) {
+    if (value == null) {
+      return "null"
+    }
+    String escaped = value
+        .replace("\\", "\\\\")
+        .replace("\"", "\\\"")
+        .replace("\n", "\\n")
+        .replace("\r", "\\r")
+        .replace("\t", "\\t")
+    return "\"${escaped}\""
   }
 
 

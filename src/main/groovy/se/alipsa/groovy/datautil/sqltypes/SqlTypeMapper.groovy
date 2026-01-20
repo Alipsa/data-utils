@@ -191,7 +191,7 @@ abstract class SqlTypeMapper {
     if (ZonedDateTime == columnType) {
       return typeForZonedDateTime()
     }
-    println("No match for $columnType, returning blob")
+    // No SQL type mapping found for columnType, defaulting to BLOB
     return "BLOB"
   }
 
