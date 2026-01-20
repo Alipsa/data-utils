@@ -2,9 +2,28 @@
 
 ### 2.0.4, in progress
 - Upgrade dependencies
-  - Groovy [5.0.1 -> 5.0.2]
-  - Junit Jupiter [5.14.0 -> 6.0.0]
-  - Junit platform launcher [1.14.0 -> 6.0.0]
+  - Groovy [5.0.1 -> 5.0.3]
+  - JUnit Jupiter [5.14.0 -> 6.0.2]
+  - JUnit Platform Launcher [1.14.0 -> 6.0.2]
+- Bug fixes
+  - `ConnectionInfo.asJson()` - Fixed invalid JSON output (was using `=` instead of `:`)
+  - `ConnectionInfo.asJson()` - Added proper escaping for special characters (`\`, `"`, `\n`, `\r`, `\t`)
+  - `ConnectionInfo.hashCode()` - Fixed NPE when `name` is null (now returns 0)
+  - `ConnectionInfo.compareTo()` - Now properly throws `NullPointerException` when comparing with null
+- Code quality improvements
+  - Removed debug `println` statement from `SqlTypeMapper`
+  - Refactored `SqlUtil.driver()` classloader fallback logic for clarity
+  - Removed commented-out debug code from `SqlUtil`
+- Build improvements
+  - Added JaCoCo for code coverage reporting (v0.8.12)
+  - Added CodeNarc for Groovy static analysis (v3.5.0)
+- Documentation
+  - Completely rewrote README.md with comprehensive examples for multiple databases
+- Test coverage
+  - Added `ConnectionInfoTest` (24 test methods)
+  - Added `DataGeneratorTest` (7 test methods)
+  - Expanded `SqlTypeMapperTest` with SQL Server and PostgreSQL mapping tests
+  - Expanded `SqlUtilTest` with driver detection and ConnectionInfo usage tests
 
 ### 2.0.3, 2025-10-25
 - Fix getDriverClassName for h2 in SqlUtil
