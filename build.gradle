@@ -6,12 +6,14 @@ plugins {
   id 'java-library'
   id 'signing'
   id 'maven-publish'
+  id 'jacoco'
+  id 'codenarc'
   id("se.alipsa.nexus-release-plugin") version '2.0.0'
   id "com.github.ben-manes.versions" version "0.53.0"
 }
 
 group = 'se.alipsa.groovy'
-version = '2.0.4-SNAPSHOT'
+version = '2.0.4'
 description = 'Extensions to Groovy SQL'
 
 repositories {
@@ -22,15 +24,15 @@ repositories {
 }
 
 dependencies {
-  def groovyVersion = "5.0.2"
+  def groovyVersion = "5.0.3"
   // By using compileOnly instead of implementation, the jar will not be available at runtime
   // and hence users can use whatever compatible version of Groovy that they want
   compileOnly "org.apache.groovy:groovy:${groovyVersion}"
   compileOnly "org.apache.groovy:groovy-sql:${groovyVersion}"
   //implementation 'org.apache.logging.log4j:log4j-api:2.23.1'
 
-  testImplementation 'org.junit.jupiter:junit-jupiter:6.0.0'
-  testRuntimeOnly 'org.junit.platform:junit-platform-launcher:6.0.0'
+  testImplementation 'org.junit.jupiter:junit-jupiter:6.0.2'
+  testRuntimeOnly 'org.junit.platform:junit-platform-launcher:6.0.2'
   testImplementation 'com.h2database:h2:2.4.240'
   testImplementation "org.apache.groovy:groovy:${groovyVersion}"
   testImplementation "org.apache.groovy:groovy-sql:${groovyVersion}"
@@ -46,8 +48,30 @@ compileGroovy {
   options.deprecation = true
 }
 
+// Code coverage reporting
+jacoco {
+  toolVersion = "0.8.12"
+}
+
+jacocoTestReport {
+  dependsOn test
+  reports {
+    xml.required = true
+    html.required = true
+  }
+}
+
+// Groovy static analysis
+codenarc {
+  toolVersion = "3.5.0"
+  configFile = file("config/codenarc/codenarc.xml")
+  reportFormat = "html"
+  ignoreFailures = true  // Don't fail build on violations, just report them
+}
+
 test {
   testLogging.showStandardStreams = true
+  finalizedBy jacocoTestReport  // Generate coverage report after tests
 
   useJUnitPlatform()
   testLogging {
@@ -56,10 +80,10 @@ test {
         TestLogEvent.PASSED,
         TestLogEvent.SKIPPED,
         TestLogEvent.STANDARD_OUT
-    exceptionFormat TestExceptionFormat.FULL
-    showExceptions true
-    showCauses true
-    showStackTraces true
+    exceptionFormat = TestExceptionFormat.FULL
+    showExceptions = true
+    showCauses = true
+    showStackTraces = true
 
     // set options for log level DEBUG and INFO
     debug {
@@ -69,7 +93,7 @@ test {
           TestLogEvent.SKIPPED,
           TestLogEvent.STANDARD_ERROR,
           TestLogEvent.STANDARD_OUT
-      exceptionFormat TestExceptionFormat.FULL
+      exceptionFormat = TestExceptionFormat.FULL
     }
     info.events = debug.events
     info.exceptionFormat = debug.exceptionFormat

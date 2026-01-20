@@ -2,11 +2,12 @@ package test.alipsa.groovy.datautil
 
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
+import se.alipsa.groovy.datautil.ConnectionInfo
 import se.alipsa.groovy.datautil.SqlUtil
 
 import java.time.LocalDate
 
-import static org.junit.jupiter.api.Assertions.assertEquals
+import static org.junit.jupiter.api.Assertions.*
 
 class SqlUtilTest {
 
@@ -62,6 +63,63 @@ class SqlUtilTest {
       }
     }
     assertEquals(2, idList.size(), "Number of rows")
+  }
+
+  @Test
+  void testGetDriverClassNameForKnownDatabases() {
+    assertEquals("com.microsoft.sqlserver.jdbc.SQLServerDriver", SqlUtil.getDriverClassName("jdbc:sqlserver://localhost"))
+    assertEquals("com.mysql.jdbc.Driver", SqlUtil.getDriverClassName("jdbc:mysql://localhost"))
+    assertEquals("org.mariadb.jdbc.Driver", SqlUtil.getDriverClassName("jdbc:mariadb://localhost"))
+    assertEquals("org.postgresql.Driver", SqlUtil.getDriverClassName("jdbc:postgresql://localhost"))
+    assertEquals("org.apache.derby.jdbc.EmbeddedDriver", SqlUtil.getDriverClassName("jdbc:derby:testdb"))
+    assertEquals("org.hsqldb.jdbc.JDBCDriver", SqlUtil.getDriverClassName("jdbc:hsqldb:mem:test"))
+    assertEquals("org.sqlite.JDBC", SqlUtil.getDriverClassName("jdbc:sqlite:test.db"))
+    assertEquals("com.ibm.db2.jcc.DB2Driver", SqlUtil.getDriverClassName("jdbc:db2://localhost"))
+    assertEquals("oracle.jdbc.OracleDriver", SqlUtil.getDriverClassName("jdbc:oracle:thin:@localhost"))
+    assertEquals("org.h2.Driver", SqlUtil.getDriverClassName("jdbc:h2:mem:test"))
+  }
+
+  @Test
+  void testGetDriverClassNameUnknownUrl() {
+    assertThrows(RuntimeException) {
+      SqlUtil.getDriverClassName("jdbc:unknown://localhost")
+    }
+  }
+
+  @Test
+  void testGetDriverClassNameWithNullUrl() {
+    // String.valueOf(null) returns "null", which won't match any known prefix
+    assertThrows(RuntimeException) {
+      SqlUtil.getDriverClassName(null)
+    }
+  }
+
+  @Test
+  void testDriverWithNonExistentClass() {
+    assertThrows(ClassNotFoundException) {
+      SqlUtil.driver("com.nonexistent.Driver", this.class)
+    }
+  }
+
+  @Test
+  void testNewInstanceWithConnectionInfo() {
+    def ci = new ConnectionInfo("test", null, dbDriver, dbUrl, dbUser, dbPasswd)
+    def sql = SqlUtil.newInstance(ci)
+    assertNotNull(sql)
+    sql.close()
+  }
+
+  @Test
+  void testNewInstanceWithConnectionInfoNoUser() {
+    // H2 allows connections without user/password in certain modes
+    def ci = new ConnectionInfo()
+    ci.name = "test"
+    ci.driver = dbDriver
+    ci.url = "jdbc:h2:mem:testNoUser"
+
+    def sql = SqlUtil.newInstance(ci)
+    assertNotNull(sql)
+    sql.close()
   }
 
 }

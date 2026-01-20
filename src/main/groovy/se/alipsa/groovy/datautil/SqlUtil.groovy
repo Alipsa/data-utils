@@ -374,20 +374,38 @@ class SqlUtil {
    * @throws IllegalAccessException if a new instance cannot be created
    */
   static Driver driver(String driverClassName, Class caller) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
-
-    try {
-      return (Driver) caller.getClassLoader().loadClass(driverClassName).getDeclaredConstructor().newInstance();
-    } catch (ClassNotFoundException | NullPointerException ignored) {
+    // Try caller's classloader
+    ClassLoader callerClassLoader = caller?.getClassLoader()
+    if (callerClassLoader != null) {
       try {
-        return (Driver) Thread.currentThread().getContextClassLoader().loadClass(driverClassName).getDeclaredConstructor().newInstance()
-      } catch (ClassNotFoundException | NullPointerException e2) {
-        try {
-          return (Driver) SqlUtil.class.getClassLoader().loadClass(driverClassName).getDeclaredConstructor().newInstance()
-        } catch (ClassNotFoundException | NullPointerException e3) {
-          return (Driver) Class.forName(driverClassName).getDeclaredConstructor().newInstance();
-        }
+        return (Driver) callerClassLoader.loadClass(driverClassName).getDeclaredConstructor().newInstance()
+      } catch (ClassNotFoundException ignored) {
+        // Fall through to next classloader
       }
     }
+
+    // Try context classloader
+    ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader()
+    if (contextClassLoader != null) {
+      try {
+        return (Driver) contextClassLoader.loadClass(driverClassName).getDeclaredConstructor().newInstance()
+      } catch (ClassNotFoundException ignored) {
+        // Fall through to next classloader
+      }
+    }
+
+    // Try SqlUtil's classloader
+    ClassLoader sqlUtilClassLoader = SqlUtil.class.getClassLoader()
+    if (sqlUtilClassLoader != null) {
+      try {
+        return (Driver) sqlUtilClassLoader.loadClass(driverClassName).getDeclaredConstructor().newInstance()
+      } catch (ClassNotFoundException ignored) {
+        // Fall through to Class.forName
+      }
+    }
+
+    // Final fallback: Class.forName
+    return (Driver) Class.forName(driverClassName).getDeclaredConstructor().newInstance()
   }
 
   /**
@@ -412,14 +430,6 @@ class SqlUtil {
   }
 
   private static Class getCallingClass() {
-    /*
-    println("Call stack")
-    for (StackTraceElement se : Thread.currentThread().getStackTrace()) {
-        println(se.getClassName())
-    }
-    println("Call stack StackTraceElement[6] = " + Thread.currentThread().getStackTrace()[6].getClassName())
-    println("Call stack ReflectionUtils(2) = " + ReflectionUtils.getCallingClass(2))
-     */
     return ReflectionUtils.getCallingClass(2)
   }
 
