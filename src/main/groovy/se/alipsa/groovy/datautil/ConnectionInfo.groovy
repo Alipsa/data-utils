@@ -1,5 +1,8 @@
 package se.alipsa.groovy.datautil
 
+import groovy.transform.CompileStatic
+
+@CompileStatic
 class ConnectionInfo implements Comparable<ConnectionInfo> {
 
   //private static final Logger log = LogManager.getLogger(ConnectionInfo.class)
@@ -106,76 +109,106 @@ class ConnectionInfo implements Comparable<ConnectionInfo> {
     setPassword(password)
     return this
   }
+
   @Override
   int compareTo(ConnectionInfo obj) {
-    if (obj == null) {
-      throw new NullPointerException("Cannot compare with null")
+    Objects.requireNonNull(obj, 'Cannot compare with null')
+    int byName = this.name <=> obj.name
+    if (this.name != null || obj.name != null) {
+      return byName
     }
-    return this.toString() <=> obj.toString()
+
+    int byDependency = this.dependency <=> obj.dependency
+    if (byDependency != 0) {
+      return byDependency
+    }
+    int byDriver = this.driver <=> obj.driver
+    if (byDriver != 0) {
+      return byDriver
+    }
+    int byUrl = this.url <=> obj.url
+    if (byUrl != 0) {
+      return byUrl
+    }
+    int byUser = this.user <=> obj.user
+    if (byUser != 0) {
+      return byUser
+    }
+    return this.password <=> obj.password
   }
 
   @Override
   int hashCode() {
-    return name?.hashCode() ?: 0
+    if (name != null) {
+      return name.hashCode()
+    }
+    return Objects.hash(dependency, driver, url, user, password)
   }
 
   @Override
   boolean equals(Object obj) {
-    if (obj instanceof ConnectionInfo) {
-      return toString() == obj.toString();
-    } else {
-      return false;
+    if (this.is(obj)) {
+      return true
     }
+    if (!(obj instanceof ConnectionInfo)) {
+      return false
+    }
+    ConnectionInfo other = (ConnectionInfo) obj
+    if (name != null || other.name != null) {
+      return name == other.name
+    }
+    return dependency == other.dependency
+        && driver == other.driver
+        && url == other.url
+        && user == other.user
+        && password == other.password
   }
 
   Properties getProperties() {
     var props = new Properties()
     if (user != null) {
-      props.setProperty("user", user)
+      props.setProperty('user', user)
     }
     if (password != null) {
-      props.setProperty("password", password)
+      props.setProperty('password', password)
     }
-    props
+    return props
   }
 
   String getDependencyVersion() {
-    if (dependency == null) return null
+    if (dependency == null) {
+      return null
+    }
     def parts = dependency.split(':')
     if (parts.length > 2) {
       return parts[2]
-    } else {
-      return null
     }
+    return null
   }
 
   String asJson(boolean maskPassword = true) {
-
     String pwd = password
-    if(maskPassword) {
-      pwd = password == null ? "" : password.replaceAll(".", "*")
+    if (maskPassword) {
+      pwd = password == null ? '' : ('*' * password.length())
     }
-    return "{" +
-        "\"name\":${jsonValue(name)}," +
-        "\"driver\":${jsonValue(driver)}," +
-        "\"url\":${jsonValue(url)}," +
-        "\"user\":${jsonValue(user)}," +
-        "\"password\":${jsonValue(pwd)}" +
-        "}"
+    return '{"name":' + jsonValue(name) +
+        ',"driver":' + jsonValue(driver) +
+        ',"url":' + jsonValue(url) +
+        ',"user":' + jsonValue(user) +
+        ',"password":' + jsonValue(pwd) +
+        '}'
   }
 
   private static String jsonValue(String value) {
     if (value == null) {
-      return "null"
+      return 'null'
     }
     String escaped = value
-        .replace("\\", "\\\\")
-        .replace("\"", "\\\"")
-        .replace("\n", "\\n")
-        .replace("\r", "\\r")
-        .replace("\t", "\\t")
+        .replace('\\', '\\\\')
+        .replace('"', '\\"')
+        .replace('\n', '\\n')
+        .replace('\r', '\\r')
+        .replace('\t', '\\t')
     return "\"${escaped}\""
   }
-
-
 }

@@ -29,6 +29,7 @@ class SqlTypeMapperTest {
   @Test
   void testJdbcTypeMapping() {
     SqlTypeMapper mapper = SqlTypeMapper.create(DataBaseProvider.UNKNOWN)
+    assertEquals(Types.LONGVARCHAR, SqlType.LONGVARCHAR.jdbcType)
     assertEquals(Types.BIGINT, mapper.jdbcType(BigInteger))
     assertEquals(Types.BIGINT, mapper.jdbcType(Long))
     assertEquals(Types.CHAR, mapper.jdbcType(Character))

@@ -1,10 +1,13 @@
 package se.alipsa.groovy.datautil.sqltypes
 
+import groovy.transform.CompileStatic
+
+@CompileStatic
 class H2TypeMapper extends DefaultTypeMapper {
 
   @Override
   String typeForBigDecimal(Integer precision, Integer scale) {
-    return "NUMBER"
+    return 'NUMBER'
   }
 
   @Override
@@ -13,9 +16,6 @@ class H2TypeMapper extends DefaultTypeMapper {
     if (size == null) {
       return SqlType.VARCHAR.toString()
     }
-    if (size > 1_000_000_000   ) {
-      return "$SqlType.CLOB($size)"
-    }
-    return "$SqlType.VARCHAR(${Math.max(size, 1)})"
+    return size > 1_000_000_000 ? "$SqlType.CLOB($size)" : "$SqlType.VARCHAR(${Math.max(size, 1)})"
   }
 }

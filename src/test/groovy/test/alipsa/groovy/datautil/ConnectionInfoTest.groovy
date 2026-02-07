@@ -61,7 +61,8 @@ class ConnectionInfoTest {
   @Test
   void testHashCodeWithNullName() {
     def ci = new ConnectionInfo()
-    assertEquals(0, ci.hashCode())
+    def ci2 = new ConnectionInfo()
+    assertEquals(ci.hashCode(), ci2.hashCode())
   }
 
   @Test
@@ -89,6 +90,15 @@ class ConnectionInfoTest {
     ci2.name = "test2"
 
     assertNotEquals(ci1, ci2)
+  }
+
+  @Test
+  void testEqualsWithNullNamesAndDifferentDetails() {
+    def ci1 = new ConnectionInfo(null, null, "org.h2.Driver", "jdbc:h2:mem:a", "sa", "one")
+    def ci2 = new ConnectionInfo(null, null, "org.h2.Driver", "jdbc:h2:mem:b", "sa", "one")
+
+    assertNotEquals(ci1, ci2)
+    assertNotEquals(ci1.hashCode(), ci2.hashCode())
   }
 
   @Test
@@ -120,6 +130,15 @@ class ConnectionInfoTest {
     assertTrue(ci1.compareTo(ci2) < 0)
     assertTrue(ci2.compareTo(ci1) > 0)
     assertEquals(0, ci1.compareTo(ci1))
+  }
+
+  @Test
+  void testCompareToWithNullNamesUsesDetails() {
+    def ci1 = new ConnectionInfo(null, null, "org.h2.Driver", "jdbc:h2:mem:a", "sa", "one")
+    def ci2 = new ConnectionInfo(null, null, "org.h2.Driver", "jdbc:h2:mem:b", "sa", "one")
+
+    assertTrue(ci1.compareTo(ci2) < 0)
+    assertTrue(ci2.compareTo(ci1) > 0)
   }
 
   @Test
@@ -252,5 +271,16 @@ class ConnectionInfoTest {
 
     assertTrue(json.contains('\\n'))  // Escaped newline
     assertTrue(json.contains('\\r'))  // Escaped carriage return
+  }
+
+  @Test
+  void testAsJsonMasksPasswordWithNewlines() {
+    def ci = new ConnectionInfo()
+    ci.password = "ab\ncd"
+
+    def json = ci.asJson()
+
+    assertTrue(json.contains('"password":"*****"'))
+    assertFalse(json.contains('\n'))
   }
 }

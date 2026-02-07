@@ -1,10 +1,13 @@
 package se.alipsa.groovy.datautil.sqltypes
 
+import groovy.transform.CompileStatic
+
+@CompileStatic
 class DefaultTypeMapper extends SqlTypeMapper {
 
   @Override
   String typeForBigDecimal(Integer precision, Integer scale) {
-    String value = SqlType.NUMERIC.toString()
+    String value = SqlType.NUMERIC
     if (precision != null) {
       value += "($precision"
       if (scale != null) {
@@ -12,7 +15,7 @@ class DefaultTypeMapper extends SqlTypeMapper {
       }
       value += ')'
     }
-    value
+    return value
   }
 
   @Override
@@ -118,102 +121,102 @@ class DefaultTypeMapper extends SqlTypeMapper {
 
   @Override
   int jdbcTypeForBigDecimal() {
-    SqlType.NUMERIC.jdbcType
+    return SqlType.NUMERIC.jdbcType
   }
 
   @Override
   int jdbcTypeForBigInteger() {
-    SqlType.BIGINT.jdbcType
+    return SqlType.BIGINT.jdbcType
   }
 
   @Override
   int jdbcTypeForBoolean() {
-    SqlType.BIT.jdbcType
+    return SqlType.BIT.jdbcType
   }
 
   @Override
   int jdbcTypeForByte() {
-    SqlType.TINYINT.jdbcType
+    return SqlType.TINYINT.jdbcType
   }
 
   @Override
   int jdbcTypeForCharacter() {
-    SqlType.CHAR.jdbcType
+    return SqlType.CHAR.jdbcType
   }
 
   @Override
   int jdbcTypeForDouble() {
-    SqlType.DOUBLE.jdbcType
+    return SqlType.DOUBLE.jdbcType
   }
 
   @Override
   int jdbcTypeForFloat() {
-    SqlType.REAL.jdbcType
+    return SqlType.REAL.jdbcType
   }
 
   @Override
   int jdbcTypeForInstant() {
-    SqlType.TIMESTAMP.jdbcType
+    return SqlType.TIMESTAMP.jdbcType
   }
 
   @Override
   int jdbcTypeForInteger() {
-    SqlType.INTEGER.jdbcType
+    return SqlType.INTEGER.jdbcType
   }
 
   @Override
   int jdbcTypeForDate() {
-    SqlType.DATE.jdbcType
+    return SqlType.DATE.jdbcType
   }
 
   @Override
   int jdbcTypeForLocalDate() {
-    SqlType.DATE.jdbcType
+    return SqlType.DATE.jdbcType
   }
 
   @Override
   int jdbcTypeForLocalTime() {
-    SqlType.TIME.jdbcType
+    return SqlType.TIME.jdbcType
   }
 
   @Override
   int jdbcTypeForLocalDateTime() {
-    SqlType.TIMESTAMP.jdbcType
+    return SqlType.TIMESTAMP.jdbcType
   }
 
   @Override
   int jdbcTypeForLong() {
-    SqlType.BIGINT.jdbcType
+    return SqlType.BIGINT.jdbcType
   }
 
   @Override
   int jdbcTypeForShort() {
-    SqlType.SMALLINT.jdbcType
+    return SqlType.SMALLINT.jdbcType
   }
 
   @Override
   int jdbcTypeForString() {
-    SqlType.VARCHAR.jdbcType
+    return SqlType.VARCHAR.jdbcType
   }
 
   @Override
   int jdbcTypeForTime() {
-    SqlType.TIME.jdbcType
+    return SqlType.TIME.jdbcType
   }
 
   @Override
   int jdbcTypeForTimestamp() {
-    SqlType.TIMESTAMP.jdbcType
+    return SqlType.TIMESTAMP.jdbcType
   }
 
   @Override
   int jdbcTypeForByteArray() {
-    SqlType.VARBINARY.jdbcType
+    return SqlType.VARBINARY.jdbcType
   }
 
   @Override
   int jdbcTypeForZonedDateTime() {
-    SqlType.TIMESTAMP_WITH_TIMEZONE.jdbcType
+    return SqlType.TIMESTAMP_WITH_TIMEZONE.jdbcType
   }
 
   @Override

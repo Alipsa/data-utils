@@ -1,5 +1,8 @@
 package se.alipsa.groovy.datautil.sqltypes
 
+import groovy.transform.CompileStatic
+
+@CompileStatic
 class PostgresTypeMapper extends DefaultTypeMapper {
 
   @Override
@@ -9,7 +12,7 @@ class PostgresTypeMapper extends DefaultTypeMapper {
 
   @Override
   int jdbcTypeForByte() {
-    SqlType.SMALLINT.jdbcType
+    return SqlType.SMALLINT.jdbcType
   }
 
   @Override
@@ -17,9 +20,6 @@ class PostgresTypeMapper extends DefaultTypeMapper {
     if (size == null) {
       return SqlType.VARCHAR.toString()
     }
-    if (size > 8000) {
-      return 'TEXT' // Maybe this should be CLOB?
-    }
-    return "$SqlType.VARCHAR(${Math.max(size, 1)})"
+    return size > 8000 ? 'TEXT' : "$SqlType.VARCHAR(${Math.max(size, 1)})" // Maybe this should be CLOB?
   }
 }

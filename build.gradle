@@ -66,7 +66,10 @@ codenarc {
   toolVersion = "3.5.0"
   configFile = file("config/codenarc/codenarc.xml")
   reportFormat = "html"
-  ignoreFailures = true  // Don't fail build on violations, just report them
+  ignoreFailures = false
+  maxPriority1Violations = 0
+  maxPriority2Violations = 18
+  maxPriority3Violations = 0
 }
 
 test {

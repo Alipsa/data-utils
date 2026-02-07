@@ -1,6 +1,7 @@
 package se.alipsa.groovy.datautil
 
 import groovy.sql.Sql
+import groovy.transform.CompileStatic
 import groovy.transform.stc.ClosureParams
 import groovy.transform.stc.SimpleType
 import org.codehaus.groovy.reflection.ReflectionUtils
@@ -9,8 +10,6 @@ import java.lang.reflect.InvocationTargetException
 import java.sql.Connection
 import java.sql.Driver
 import java.sql.SQLException
-
-import static se.alipsa.groovy.datautil.DataBaseProvider.*
 
 /**
  * using grab to connect to a database involves grabbing using the System Classloader which in many cases is problematic.
@@ -40,6 +39,7 @@ import static se.alipsa.groovy.datautil.DataBaseProvider.*
  *   def sql = SqlUtil.newInstance("jdbc:postgresql://localhost:5432/foo", "bar", "baz", 'org.postgresql.Driver', this)
  * </pre></code>
  */
+@CompileStatic
 class SqlUtil {
 
   /**
@@ -54,7 +54,7 @@ class SqlUtil {
    * @throws SQLException if a db issue eg. a connection issue occurred
    * @throws ClassNotFoundException if loading the driver was unsuccessful
    */
-  static void withInstance(String url, String user, String password, String driverClassName, Class caller, @ClosureParams(value = SimpleType.class, options = "groovy.sql.Sql") Closure c) throws SQLException, ClassNotFoundException {
+  static void withInstance(String url, String user, String password, String driverClassName, Class caller, @ClosureParams(value = SimpleType, options = 'groovy.sql.Sql') Closure c) throws SQLException, ClassNotFoundException {
     def sql = null
     try {
       sql = newInstance(url, user, password, driverClassName, caller) as Sql
@@ -68,7 +68,7 @@ class SqlUtil {
     }
   }
 
-  static void withInstance(String url, String user, String password, Class caller, @ClosureParams(value = SimpleType.class, options = "groovy.sql.Sql") Closure c) throws SQLException, ClassNotFoundException {
+  static void withInstance(String url, String user, String password, Class caller, @ClosureParams(value = SimpleType, options = 'groovy.sql.Sql') Closure c) throws SQLException, ClassNotFoundException {
     withInstance(url, user, password, getDriverClassName(url), caller, c)
   }
 
@@ -84,11 +84,11 @@ class SqlUtil {
    * @throws SQLException if a db issue eg. a connection issue occurred
    * @throws ClassNotFoundException if loading the driver was unsuccessful
    */
-  static void withInstance(String url, String user, String password, String driverClassName, Object caller, @ClosureParams(value = SimpleType.class, options = "groovy.sql.Sql") Closure c) throws SQLException, ClassNotFoundException {
+  static void withInstance(String url, String user, String password, String driverClassName, Object caller, @ClosureParams(value = SimpleType, options = 'groovy.sql.Sql') Closure c) throws SQLException, ClassNotFoundException {
     withInstance(url, user, password, driverClassName, caller.getClass(), c)
   }
 
-  static void withInstance(String url, String user, String password, Object caller, @ClosureParams(value = SimpleType.class, options = "groovy.sql.Sql") Closure c) throws SQLException, ClassNotFoundException {
+  static void withInstance(String url, String user, String password, Object caller, @ClosureParams(value = SimpleType, options = 'groovy.sql.Sql') Closure c) throws SQLException, ClassNotFoundException {
     withInstance(url, user, password, getDriverClassName(url), caller.getClass(), c)
   }
 
@@ -103,12 +103,12 @@ class SqlUtil {
    * @throws SQLException if a db issue eg. a connection issue occurred
    * @throws ClassNotFoundException if loading the driver was unsuccessful
    */
-  static void withInstance(String url, String user, String password, String driverClassName, @ClosureParams(value = SimpleType.class, options = "groovy.sql.Sql") Closure c) throws SQLException, ClassNotFoundException {
-    withInstance(url, user, password, driverClassName, getCallingClass(), c);
+  static void withInstance(String url, String user, String password, String driverClassName, @ClosureParams(value = SimpleType, options = 'groovy.sql.Sql') Closure c) throws SQLException, ClassNotFoundException {
+    withInstance(url, user, password, driverClassName, getCallingClass(), c)
   }
 
-  static void withInstance(String url, String user, String password, @ClosureParams(value = SimpleType.class, options = "groovy.sql.Sql") Closure c) throws SQLException, ClassNotFoundException {
-    withInstance(url, user, password, getDriverClassName(url), getCallingClass(), c);
+  static void withInstance(String url, String user, String password, @ClosureParams(value = SimpleType, options = 'groovy.sql.Sql') Closure c) throws SQLException, ClassNotFoundException {
+    withInstance(url, user, password, getDriverClassName(url), getCallingClass(), c)
   }
 
   /**
@@ -121,13 +121,13 @@ class SqlUtil {
    * @throws SQLException if a db issue eg. a connection issue occurred
    * @throws ClassNotFoundException if loading the driver was unsuccessful
    */
-  static void withInstance(String url, String driverClassName, Class caller, @ClosureParams(value = SimpleType.class, options = "groovy.sql.Sql") Closure c) throws SQLException, ClassNotFoundException {
+  static void withInstance(String url, String driverClassName, Class caller, @ClosureParams(value = SimpleType, options = 'groovy.sql.Sql') Closure c) throws SQLException, ClassNotFoundException {
     def sql = null
     try {
       sql = newInstance(url, driverClassName, caller) as Sql
       c.call(sql)
     } catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
-      throw new ClassNotFoundException(e.getMessage());
+      throw new ClassNotFoundException(e.getMessage())
     } finally {
       if (sql != null) {
         sql.close()
@@ -135,7 +135,7 @@ class SqlUtil {
     }
   }
 
-  static void withInstance(String url, Class caller, @ClosureParams(value = SimpleType.class, options = "groovy.sql.Sql") Closure c) throws SQLException, ClassNotFoundException {
+  static void withInstance(String url, Class caller, @ClosureParams(value = SimpleType, options = 'groovy.sql.Sql') Closure c) throws SQLException, ClassNotFoundException {
     withInstance(url, getDriverClassName(url), caller, c)
   }
 
@@ -148,11 +148,11 @@ class SqlUtil {
    * @throws SQLException if a db issue eg. a connection issue occurred
    * @throws ClassNotFoundException if loading the driver was unsuccessful
    */
-  static void withInstance(String url, String driverClassName, @ClosureParams(value = SimpleType.class, options = "groovy.sql.Sql") Closure c) throws SQLException, ClassNotFoundException {
+  static void withInstance(String url, String driverClassName, @ClosureParams(value = SimpleType, options = 'groovy.sql.Sql') Closure c) throws SQLException, ClassNotFoundException {
     withInstance(url, driverClassName, getCallingClass(), c)
   }
 
-  static void withInstance(String url, @ClosureParams(value = SimpleType.class, options = "groovy.sql.Sql") Closure c) throws SQLException, ClassNotFoundException {
+  static void withInstance(String url, @ClosureParams(value = SimpleType, options = 'groovy.sql.Sql') Closure c) throws SQLException, ClassNotFoundException {
     withInstance(url, getDriverClassName(url), getCallingClass(), c)
   }
 
@@ -166,15 +166,15 @@ class SqlUtil {
    * @throws SQLException if a db issue eg. a connection issue occurred
    * @throws ClassNotFoundException if loading the driver was unsuccessful
    */
-  static void withInstance(String url, String driverClassName, Object caller, @ClosureParams(value = SimpleType.class, options = "groovy.sql.Sql") Closure c) throws SQLException, ClassNotFoundException {
+  static void withInstance(String url, String driverClassName, Object caller, @ClosureParams(value = SimpleType, options = 'groovy.sql.Sql') Closure c) throws SQLException, ClassNotFoundException {
     withInstance(url, driverClassName, caller.getClass(), c)
   }
 
-  static void withInstance(String url, Object caller, @ClosureParams(value = SimpleType.class, options = "groovy.sql.Sql") Closure c) throws SQLException, ClassNotFoundException {
+  static void withInstance(String url, Object caller, @ClosureParams(value = SimpleType, options = 'groovy.sql.Sql') Closure c) throws SQLException, ClassNotFoundException {
     withInstance(url, getDriverClassName(url), caller, c)
   }
 
-  static void withInstance(ConnectionInfo ci, @ClosureParams(value = SimpleType.class, options = "groovy.sql.Sql") Closure c) throws SQLException, ClassNotFoundException {
+  static void withInstance(ConnectionInfo ci, @ClosureParams(value = SimpleType, options = 'groovy.sql.Sql') Closure c) throws SQLException, ClassNotFoundException {
     if (ci.user == null) {
       withInstance(ci.url, ci.driver, getCallingClass(), c)
     } else {
@@ -196,20 +196,18 @@ class SqlUtil {
    */
   static Sql newInstance(String url, String user, String password, String driverClassName, Class caller) throws SQLException, ClassNotFoundException {
     try {
-      Driver driver = driver(driverClassName, caller);
+      Driver driver = driver(driverClassName, caller)
       return newInstance(url, user, password, driver)
     } catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
-      throw new ClassNotFoundException(e.getMessage());
+      throw new ClassNotFoundException(e.getMessage())
     }
   }
 
   static Sql newInstance(String url, String user, String password, Class caller) throws SQLException, ClassNotFoundException {
-    newInstance(url, user, password, getDriverClassName(url), caller)
+    return newInstance(url, user, password, getDriverClassName(url), caller)
   }
 
-
-
-    /**
+  /**
    * Replacement for the groovy.sql.Sql.newInstance() static method that creates an instance of {@link groovy.sql.Sql}
    *
    * @param url the db url
@@ -226,7 +224,7 @@ class SqlUtil {
   }
 
   static Sql newInstance(String url, String user, String password, Object caller) throws SQLException, ClassNotFoundException {
-    newInstance(url, user, password, getDriverClassName(url), caller)
+    return newInstance(url, user, password, getDriverClassName(url), caller)
   }
 
   static Sql newInstance(String url, String user, String password, String driverClassName, ClassLoader classLoader) throws SQLException, ClassNotFoundException {
@@ -235,7 +233,7 @@ class SqlUtil {
   }
 
   static Sql newInstance(String url, String user, String password, ClassLoader classLoader) throws SQLException, ClassNotFoundException {
-    newInstance(url, user, password, getDriverClassName(url), classLoader)
+    return newInstance(url, user, password, getDriverClassName(url), classLoader)
   }
 
   /**
@@ -254,7 +252,7 @@ class SqlUtil {
   }
 
   static Sql newInstance(String url, String user, String password) throws SQLException, ClassNotFoundException {
-    newInstance(url, user, password, getDriverClassName(url))
+    return newInstance(url, user, password, getDriverClassName(url))
   }
 
   /**
@@ -268,11 +266,11 @@ class SqlUtil {
    * @throws ClassNotFoundException if loading the driver was unsuccessful
    */
   static Sql newInstance(String url, String driverClassName, Class caller) throws SQLException, ClassNotFoundException {
-    return newInstance(url, null, null, driverClassName, caller);
+    return newInstance(url, null, null, driverClassName, caller)
   }
 
   static Sql newInstance(String url, Class caller) throws SQLException, ClassNotFoundException {
-    newInstance(url, getDriverClassName(url), caller)
+    return newInstance(url, getDriverClassName(url), caller)
   }
 
   /**
@@ -286,11 +284,11 @@ class SqlUtil {
    * @throws ClassNotFoundException if loading the driver was unsuccessful
    */
   static Sql newInstance(String url, String driverClassName, Object caller) throws SQLException, ClassNotFoundException {
-    return newInstance(url, null, null, driverClassName, caller.getClass());
+    return newInstance(url, null, null, driverClassName, caller.getClass())
   }
 
   static Sql newInstance(String url, Object caller) throws SQLException, ClassNotFoundException {
-    newInstance(url, getDriverClassName(url), caller)
+    return newInstance(url, getDriverClassName(url), caller)
   }
 
   /**
@@ -303,11 +301,11 @@ class SqlUtil {
    * @throws ClassNotFoundException if loading the driver was unsuccessful
    */
   static Sql newInstance(String url, String driverClassName) throws SQLException, ClassNotFoundException {
-    return newInstance(url, driverClassName, getCallingClass());
+    return newInstance(url, driverClassName, getCallingClass())
   }
 
   static Sql newInstance(String url) throws SQLException, ClassNotFoundException {
-    newInstance(url, getDriverClassName(url))
+    return newInstance(url, getDriverClassName(url))
   }
 
   /**
@@ -325,35 +323,35 @@ class SqlUtil {
     try {
       var props = new Properties()
       if (user != null) {
-        props.setProperty("user", user)
+        props.setProperty('user', user)
       }
       if (password != null) {
-        props.setProperty("password", password)
+        props.setProperty('password', password)
       }
       Connection con = driver.connect(url, props)
       return new Sql(con)
     } catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
-      throw new ClassNotFoundException(e.getMessage());
+      throw new ClassNotFoundException(e.getMessage())
     }
   }
 
-  static Sql newInstance(ConnectionInfo connectionInfo, Class caller = SqlUtil.class) {
+  static Sql newInstance(ConnectionInfo connectionInfo, Class caller = SqlUtil) {
     return new Sql(connect(connectionInfo, caller))
   }
 
-  static Connection connect(String driverClass, String jdbcUrl, Properties props, Class caller = SqlUtil.class) {
+  static Connection connect(String driverClass, String jdbcUrl, Properties props, Class caller = SqlUtil) {
     Driver driver = driver(driverClass, caller)
-    driver.connect(jdbcUrl, props)
+    return driver.connect(jdbcUrl, props)
   }
 
-  static Connection connect(String jdbcUrl, Properties props, Class caller = SqlUtil.class) {
+  static Connection connect(String jdbcUrl, Properties props, Class caller = SqlUtil) {
     Driver driver = driver(getDriverClassName(jdbcUrl), caller)
-    driver.connect(jdbcUrl, props)
+    return driver.connect(jdbcUrl, props)
   }
 
-  static Connection connect(ConnectionInfo connectionInfo, Class caller = SqlUtil.class) {
+  static Connection connect(ConnectionInfo connectionInfo, Class caller = SqlUtil) {
     Driver driver = driver(connectionInfo.driver, caller)
-    driver.connect(connectionInfo.url, connectionInfo.properties)
+    return driver.connect(connectionInfo.url, connectionInfo.properties)
   }
 
   /**
@@ -395,7 +393,7 @@ class SqlUtil {
     }
 
     // Try SqlUtil's classloader
-    ClassLoader sqlUtilClassLoader = SqlUtil.class.getClassLoader()
+    ClassLoader sqlUtilClassLoader = SqlUtil.getClassLoader()
     if (sqlUtilClassLoader != null) {
       try {
         return (Driver) sqlUtilClassLoader.loadClass(driverClassName).getDeclaredConstructor().newInstance()
@@ -441,34 +439,34 @@ class SqlUtil {
    */
   static String getDriverClassName(String url) {
     String lcUrl = String.valueOf(url).toLowerCase()
-    if (lcUrl.startsWith(MSSQL.urlStart)) {
+    if (lcUrl.startsWith(DataBaseProvider.MSSQL.urlStart)) {
       return 'com.microsoft.sqlserver.jdbc.SQLServerDriver'
     }
-    if (lcUrl.startsWith(MYSQL.urlStart)) {
+    if (lcUrl.startsWith(DataBaseProvider.MYSQL.urlStart)) {
       return 'com.mysql.jdbc.Driver'
     }
-    if (lcUrl.startsWith(MARIADB.urlStart)) {
+    if (lcUrl.startsWith(DataBaseProvider.MARIADB.urlStart)) {
       return 'org.mariadb.jdbc.Driver'
     }
-    if (lcUrl.startsWith(POSTGRESQL.urlStart)) {
+    if (lcUrl.startsWith(DataBaseProvider.POSTGRESQL.urlStart)) {
       return 'org.postgresql.Driver'
     }
-    if (lcUrl.startsWith(DERBY.urlStart)) {
+    if (lcUrl.startsWith(DataBaseProvider.DERBY.urlStart)) {
       return 'org.apache.derby.jdbc.EmbeddedDriver'
     }
-    if (lcUrl.startsWith(HSQLDB.urlStart)) {
+    if (lcUrl.startsWith(DataBaseProvider.HSQLDB.urlStart)) {
       return 'org.hsqldb.jdbc.JDBCDriver'
     }
-    if (lcUrl.startsWith(SQLLITE.urlStart)) {
+    if (lcUrl.startsWith(DataBaseProvider.SQLLITE.urlStart)) {
       return 'org.sqlite.JDBC'
     }
-    if (lcUrl.startsWith(DB2.urlStart)) {
+    if (lcUrl.startsWith(DataBaseProvider.DB2.urlStart)) {
       return 'com.ibm.db2.jcc.DB2Driver'
     }
-    if (lcUrl.startsWith(ORACLE.urlStart)) {
+    if (lcUrl.startsWith(DataBaseProvider.ORACLE.urlStart)) {
       return 'oracle.jdbc.OracleDriver'
     }
-    if (lcUrl.startsWith(H2.urlStart)) {
+    if (lcUrl.startsWith(DataBaseProvider.H2.urlStart)) {
       return 'org.h2.Driver'
     }
     throw new RuntimeException("Cannot determine driver class name from url: $url, please provide driver class name explicitly")

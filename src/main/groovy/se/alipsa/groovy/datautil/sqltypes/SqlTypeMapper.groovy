@@ -1,15 +1,19 @@
 package se.alipsa.groovy.datautil.sqltypes
 
+import groovy.transform.CompileStatic
 import se.alipsa.groovy.datautil.ConnectionInfo
 import se.alipsa.groovy.datautil.DataBaseProvider
 
-import java.sql.Date
+import java.sql.Date as SqlDate
 import java.sql.Time
 import java.sql.Timestamp
-import java.time.*
+import java.time.Instant
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.ZonedDateTime
 
-import static se.alipsa.groovy.datautil.DataBaseProvider.*
-
+@CompileStatic
 abstract class SqlTypeMapper {
 
   static final String VARCHAR_SIZE = 'varcharSize'
@@ -107,27 +111,36 @@ abstract class SqlTypeMapper {
   }
 
   static SqlTypeMapper create(ConnectionInfo ci) {
-    create(ci.urlSafe)
+    return create(ci.urlSafe)
   }
 
   static SqlTypeMapper create(String jdbcUrl) {
-    create(fromUrl(jdbcUrl))
+    return create(DataBaseProvider.fromUrl(jdbcUrl))
   }
 
   static SqlTypeMapper create(DataBaseProvider provider) {
     SqlTypeMapper mapper
     switch (provider) {
-      case H2 -> mapper = new H2TypeMapper()
-      case POSTGRESQL -> mapper = new PostgresTypeMapper()
-      case MSSQL -> mapper = new SqlServerTypeMapper()
-      case DERBY -> mapper = new DerbyTypeMapper()
-      default -> mapper = new DefaultTypeMapper()
+      case DataBaseProvider.H2:
+        mapper = new H2TypeMapper()
+        break
+      case DataBaseProvider.POSTGRESQL:
+        mapper = new PostgresTypeMapper()
+        break
+      case DataBaseProvider.MSSQL:
+        mapper = new SqlServerTypeMapper()
+        break
+      case DataBaseProvider.DERBY:
+        mapper = new DerbyTypeMapper()
+        break
+      default:
+        mapper = new DefaultTypeMapper()
     }
-    mapper
+    return mapper
   }
 
   String sqlType(Class<?> columnType) {
-    sqlType(columnType, [:])
+    return sqlType(columnType, [:])
   }
 
   String sqlType(Class columnType, Map<String, Integer> sizeMap) {
@@ -182,7 +195,7 @@ abstract class SqlTypeMapper {
     if (Timestamp == columnType) {
       return typeForTimestamp()
     }
-    if (Date == columnType) {
+    if (SqlDate == columnType) {
       return typeForDate()
     }
     if (byte[] == columnType) {
@@ -192,33 +205,64 @@ abstract class SqlTypeMapper {
       return typeForZonedDateTime()
     }
     // No SQL type mapping found for columnType, defaulting to BLOB
-    return "BLOB"
+    return 'BLOB'
   }
 
   int jdbcType(Class type) {
     // Note: Order is important since Time and TimeStamp extends Date
-    return switch (type) {
-      case String -> jdbcTypeForString()
-      case byte[], Byte[] -> jdbcTypeForByteArray()
-      case boolean, Boolean -> jdbcTypeForBoolean()
-      case short, Short -> jdbcTypeForShort()
-      case int, Integer -> jdbcTypeForInteger()
-      case long, Long -> jdbcTypeForLong()
-      case BigInteger -> jdbcTypeForBigInteger()
-      case float, Float -> jdbcTypeForFloat()
-      case double, Double -> jdbcTypeForDouble()
-      case BigDecimal -> jdbcTypeForBigDecimal()
-      case Time -> jdbcTypeForTime()
-      case LocalTime -> jdbcTypeForLocalTime()
-      case Instant -> jdbcTypeForInstant()
-      case Timestamp -> jdbcTypeForTimestamp()
-      case LocalDateTime -> jdbcTypeForLocalDateTime()
-      case java.util.Date, Date -> jdbcTypeForDate()
-      case LocalDate -> jdbcTypeForLocalDate()
-      case ZonedDateTime -> jdbcTypeForZonedDateTime()
-      case char, Character -> jdbcTypeForCharacter()
-      case byte, Byte -> jdbcTypeForByte()
-      default -> SqlType.OTHER.jdbcType
+    switch (type) {
+      case String:
+        return jdbcTypeForString()
+      case byte[]:
+      case Byte[]:
+        return jdbcTypeForByteArray()
+      case boolean:
+      case Boolean:
+        return jdbcTypeForBoolean()
+      case short:
+      case Short:
+        return jdbcTypeForShort()
+      case int:
+      case Integer:
+        return jdbcTypeForInteger()
+      case long:
+      case Long:
+        return jdbcTypeForLong()
+      case BigInteger:
+        return jdbcTypeForBigInteger()
+      case float:
+      case Float:
+        return jdbcTypeForFloat()
+      case double:
+      case Double:
+        return jdbcTypeForDouble()
+      case BigDecimal:
+        return jdbcTypeForBigDecimal()
+      case Time:
+        return jdbcTypeForTime()
+      case LocalTime:
+        return jdbcTypeForLocalTime()
+      case Instant:
+        return jdbcTypeForInstant()
+      case Timestamp:
+        return jdbcTypeForTimestamp()
+      case LocalDateTime:
+        return jdbcTypeForLocalDateTime()
+      case Date:
+      case SqlDate:
+        return jdbcTypeForDate()
+      case LocalDate:
+        return jdbcTypeForLocalDate()
+      case ZonedDateTime:
+        return jdbcTypeForZonedDateTime()
+      case char:
+      case Character:
+        return jdbcTypeForCharacter()
+      case byte:
+      case Byte:
+        return jdbcTypeForByte()
+      default:
+        return SqlType.OTHER.jdbcType
     }
   }
 }

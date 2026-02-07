@@ -1,7 +1,10 @@
 package se.alipsa.groovy.datautil.sqltypes
 
+import groovy.transform.CompileStatic
+
 import java.sql.Types
 
+@CompileStatic
 enum SqlType {
 
   ARRAY(Types.ARRAY),
@@ -21,7 +24,7 @@ enum SqlType {
   INTEGER(Types.INTEGER),
   JAVA_OBJECT(Types.JAVA_OBJECT),
   LONGVARBINARY(Types.LONGVARBINARY),
-  LONGVARCHAR(Types.LONGNVARCHAR),
+  LONGVARCHAR(Types.LONGVARCHAR),
   NCAR(Types.NCHAR),
   NUMERIC(Types.NUMERIC),
   NVARCHAR(Types.NVARCHAR),
@@ -53,11 +56,11 @@ enum SqlType {
   }
 
   int getJdbcType() {
-    jdbcType
+    return jdbcType
   }
 
   @Override
   String toString() {
-    sqlType
+    return sqlType
   }
 }

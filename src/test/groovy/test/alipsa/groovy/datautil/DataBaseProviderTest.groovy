@@ -14,4 +14,18 @@ class DataBaseProviderTest {
     assertEquals(H2, findEnumMatch(url))
     assertEquals(MSSQL, fromUrl(url))
   }
+
+  @Test
+  void testFromUrlWithNullOrBlank() {
+    assertEquals(UNKNOWN, fromUrl(null))
+    assertEquals(UNKNOWN, fromUrl(""))
+    assertEquals(UNKNOWN, findEnumMatch(null))
+    assertEquals(UNKNOWN, findEnumMatch("   "))
+  }
+
+  @Test
+  void testFromUrlCaseInsensitivePrefix() {
+    assertEquals(H2, fromUrl("JDBC:H2:mem:test"))
+    assertEquals(POSTGRESQL, fromUrl("JDBC:POSTGRESQL://localhost/db"))
+  }
 }

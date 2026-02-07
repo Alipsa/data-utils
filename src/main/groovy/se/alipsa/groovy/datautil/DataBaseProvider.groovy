@@ -1,5 +1,8 @@
 package se.alipsa.groovy.datautil
 
+import groovy.transform.CompileStatic
+
+@CompileStatic
 enum DataBaseProvider {
 
   UNKNOWN('unknown', null, null),
@@ -47,6 +50,9 @@ enum DataBaseProvider {
   }
 
   static DataBaseProvider fromUrl(String url) {
+    if (url == null || url.isBlank()) {
+      return UNKNOWN
+    }
     DataBaseProvider provider = findEnumMatch(url)
     String ucUrl = url.toUpperCase()
     if (provider == H2 && ucUrl.contains('MODE=')) {
@@ -68,13 +74,16 @@ enum DataBaseProvider {
         provider = MSSQL
       }
     }
-    provider
+    return provider
   }
 
   static DataBaseProvider findEnumMatch(String url) {
+    if (url == null || url.isBlank()) {
+      return UNKNOWN
+    }
+    String lcUrl = url.toLowerCase()
     for (DataBaseProvider db : values()) {
-      //println "${url.startsWith(db.urlStart)} ${db.urlStart} in url"
-      if (url.startsWith(db.urlStart)) {
+      if (lcUrl.startsWith(db.urlStart)) {
         return db
       }
     }

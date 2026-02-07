@@ -97,4 +97,14 @@ class DataGeneratorTest {
     assertEquals(YearMonth.of(2024, 5), result[0])
     assertEquals(YearMonth.of(2024, 6), result[1])
   }
+
+  @Test
+  void testYearMonthsBetweenStartAfterEndThrows() {
+    def start = YearMonth.of(2024, 6)
+    def end = YearMonth.of(2024, 5)
+
+    assertThrows(IllegalArgumentException) {
+      DataGenerator.yearMonthsBetween(start, end)
+    }
+  }
 }

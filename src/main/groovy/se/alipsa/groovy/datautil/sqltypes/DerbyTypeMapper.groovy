@@ -1,9 +1,12 @@
 package se.alipsa.groovy.datautil.sqltypes
 
+import groovy.transform.CompileStatic
+
 import java.sql.Timestamp
 import java.time.LocalDate
 import java.time.LocalDateTime
 
+@CompileStatic
 class DerbyTypeMapper extends DefaultTypeMapper {
 
   @Override

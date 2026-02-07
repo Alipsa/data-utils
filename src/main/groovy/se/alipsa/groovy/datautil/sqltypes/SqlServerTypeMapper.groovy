@@ -1,5 +1,8 @@
 package se.alipsa.groovy.datautil.sqltypes
 
+import groovy.transform.CompileStatic
+
+@CompileStatic
 class SqlServerTypeMapper extends DefaultTypeMapper {
 
   @Override
@@ -24,12 +27,12 @@ class SqlServerTypeMapper extends DefaultTypeMapper {
 
   @Override
   String typeForInteger() {
-    return "INT"
+    return 'INT'
   }
 
   @Override
   String typeForLocalDateTime() {
-    return "datetime2"
+    return 'datetime2'
   }
 
   @Override
@@ -42,15 +45,12 @@ class SqlServerTypeMapper extends DefaultTypeMapper {
     if (size == null) {
       return SqlType.VARCHAR.toString()
     }
-    if (size > 8000) {
-      return "$SqlType.VARCHAR(max)" // Maybe this should be CLOB?
-    }
-    return "$SqlType.VARCHAR(${Math.max(size, 1)})"
+    return size > 8000 ? "$SqlType.VARCHAR(max)" : "$SqlType.VARCHAR(${Math.max(size, 1)})" // Maybe this should be CLOB?
   }
 
   @Override
   String typeForBigDecimal(Integer precision, Integer scale) {
-    String value = SqlType.DECIMAL.toString()
+    String value = SqlType.DECIMAL
     if (precision != null) {
       value += "($precision"
       if (scale != null) {
@@ -58,11 +58,11 @@ class SqlServerTypeMapper extends DefaultTypeMapper {
       }
       value += ')'
     }
-    value
+    return value
   }
 
   @Override
   int jdbcTypeForBigDecimal() {
-    SqlType.DECIMAL.jdbcType
+    return SqlType.DECIMAL.jdbcType
   }
 }
