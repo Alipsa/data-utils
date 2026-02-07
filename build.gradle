@@ -8,7 +8,7 @@ plugins {
   id 'maven-publish'
   id 'jacoco'
   id 'codenarc'
-  id("se.alipsa.nexus-release-plugin") version '2.0.0'
+  id("se.alipsa.nexus-release-plugin") version '2.0.1'
   id "com.github.ben-manes.versions" version "0.53.0"
 }
 
@@ -24,7 +24,7 @@ repositories {
 }
 
 dependencies {
-  def groovyVersion = "5.0.3"
+  def groovyVersion = "5.0.4"
   // By using compileOnly instead of implementation, the jar will not be available at runtime
   // and hence users can use whatever compatible version of Groovy that they want
   compileOnly "org.apache.groovy:groovy:${groovyVersion}"

@@ -1,6 +1,9 @@
 ## Version history
 
-### 2.0.4, in progress
+### 2.0.5, 2026-02-07
+- Allow asJson to include the actual password value when maskPassword is false (was previously always masking the password)
+- 
+### 2.0.4, 2026-01-20
 - Upgrade dependencies
   - Groovy [5.0.1 -> 5.0.3]
   - JUnit Jupiter [5.14.0 -> 6.0.2]

@@ -149,8 +149,12 @@ class ConnectionInfo implements Comparable<ConnectionInfo> {
     }
   }
 
-  String asJson() {
-    String pwd = password == null ? "" : password.replaceAll(".", "*")
+  String asJson(boolean maskPassword = true) {
+
+    String pwd = password
+    if(maskPassword) {
+      pwd = password == null ? "" : password.replaceAll(".", "*")
+    }
     return "{" +
         "\"name\":${jsonValue(name)}," +
         "\"driver\":${jsonValue(driver)}," +
