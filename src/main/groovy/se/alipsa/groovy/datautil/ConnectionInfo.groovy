@@ -192,6 +192,7 @@ class ConnectionInfo implements Comparable<ConnectionInfo> {
       pwd = password == null ? '' : ('*' * password.length())
     }
     return '{"name":' + jsonValue(name) +
+        ',"dependency":' + jsonValue(dependency) +
         ',"driver":' + jsonValue(driver) +
         ',"url":' + jsonValue(url) +
         ',"user":' + jsonValue(user) +

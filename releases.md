@@ -1,5 +1,9 @@
 ## Version history
 
+
+### 2.0.6, 2026-02-07
+- added dependencies string to ConnectionInfo.asJson() output to enable complete serialization support for ConnectionInfo objects, including driver dependency information.
+
 ### 2.0.5, 2026-02-07
 - Allow asJson to include the actual password value when maskPassword is false (was previously always masking the password)
 - Fix `ConnectionInfo` equality/hash/compare behaviour for unnamed connections and correct password masking for multiline passwords
