@@ -17,7 +17,7 @@ data-utils is available from Maven Central.
 
 **Gradle:**
 ```groovy
-implementation "se.alipsa.groovy:data-utils:2.0.4"
+implementation "se.alipsa.groovy:data-utils:2.0.5"
 ```
 
 **Maven:**
@@ -25,14 +25,14 @@ implementation "se.alipsa.groovy:data-utils:2.0.4"
 <dependency>
     <groupId>se.alipsa.groovy</groupId>
     <artifactId>data-utils</artifactId>
-    <version>2.0.4</version>
+    <version>2.0.5</version>
 </dependency>
 ```
 
 ## Quick Start
 
 ```groovy
-@Grab('se.alipsa.groovy:data-utils:2.0.4')
+@Grab('se.alipsa.groovy:data-utils:2.0.5')
 @Grab('org.postgresql:postgresql:42.7.8')
 
 import se.alipsa.groovy.datautil.SqlUtil
@@ -49,7 +49,7 @@ SqlUtil.withInstance("jdbc:postgresql://localhost:5432/mydb", "user", "password"
 ### H2 (In-Memory)
 
 ```groovy
-@Grab('se.alipsa.groovy:data-utils:2.0.4')
+@Grab('se.alipsa.groovy:data-utils:2.0.5')
 @Grab('com.h2database:h2:2.2.224')
 
 import se.alipsa.groovy.datautil.SqlUtil
@@ -73,7 +73,7 @@ SqlUtil.withInstance("jdbc:h2:mem:testdb", "sa", "") { sql ->
 ### H2 (File-based)
 
 ```groovy
-@Grab('se.alipsa.groovy:data-utils:2.0.4')
+@Grab('se.alipsa.groovy:data-utils:2.0.5')
 @Grab('com.h2database:h2:2.2.224')
 
 import se.alipsa.groovy.datautil.SqlUtil
@@ -87,7 +87,7 @@ SqlUtil.withInstance("jdbc:h2:file:${dbPath}", "sa", "password") { sql ->
 ### MySQL / MariaDB
 
 ```groovy
-@Grab('se.alipsa.groovy:data-utils:2.0.4')
+@Grab('se.alipsa.groovy:data-utils:2.0.5')
 @Grab('com.mysql:mysql-connector-j:8.2.0')
 
 import se.alipsa.groovy.datautil.SqlUtil
@@ -100,7 +100,7 @@ SqlUtil.withInstance("jdbc:mysql://localhost:3306/mydb", "root", "password") { s
 ```
 
 ```groovy
-@Grab('se.alipsa.groovy:data-utils:2.0.4')
+@Grab('se.alipsa.groovy:data-utils:2.0.5')
 @Grab('org.mariadb.jdbc:mariadb-java-client:3.3.0')
 
 import se.alipsa.groovy.datautil.SqlUtil
@@ -113,7 +113,7 @@ SqlUtil.withInstance("jdbc:mariadb://localhost:3306/mydb", "root", "password") {
 ### PostgreSQL
 
 ```groovy
-@Grab('se.alipsa.groovy:data-utils:2.0.4')
+@Grab('se.alipsa.groovy:data-utils:2.0.5')
 @Grab('org.postgresql:postgresql:42.7.8')
 
 import se.alipsa.groovy.datautil.SqlUtil
@@ -128,7 +128,7 @@ SqlUtil.withInstance("jdbc:postgresql://localhost:5432/mydb", "postgres", "passw
 ### SQL Server
 
 ```groovy
-@Grab('se.alipsa.groovy:data-utils:2.0.4')
+@Grab('se.alipsa.groovy:data-utils:2.0.5')
 @Grab('com.microsoft.sqlserver:mssql-jdbc:12.4.2.jre11')
 
 import se.alipsa.groovy.datautil.SqlUtil
@@ -146,7 +146,7 @@ SqlUtil.withInstance(
 ### Oracle
 
 ```groovy
-@Grab('se.alipsa.groovy:data-utils:2.0.4')
+@Grab('se.alipsa.groovy:data-utils:2.0.5')
 @Grab('com.oracle.database.jdbc:ojdbc11:23.3.0.23.09')
 
 import se.alipsa.groovy.datautil.SqlUtil
@@ -164,7 +164,7 @@ SqlUtil.withInstance(
 ### SQLite
 
 ```groovy
-@Grab('se.alipsa.groovy:data-utils:2.0.4')
+@Grab('se.alipsa.groovy:data-utils:2.0.5')
 @Grab('org.xerial:sqlite-jdbc:3.44.1.0')
 
 import se.alipsa.groovy.datautil.SqlUtil
@@ -178,7 +178,7 @@ SqlUtil.withInstance("jdbc:sqlite:mydb.sqlite", null, null) { sql ->
 ### Apache Derby
 
 ```groovy
-@Grab('se.alipsa.groovy:data-utils:2.0.4')
+@Grab('se.alipsa.groovy:data-utils:2.0.5')
 @Grab('org.apache.derby:derby:10.16.1.1')
 @Grab('org.apache.derby:derbytools:10.16.1.1')
 
@@ -413,18 +413,18 @@ dataSource.close()
 
 ## Supported Databases
 
-| Database | URL Prefix | Auto-detected Driver |
-|----------|-----------|---------------------|
-| H2 | `jdbc:h2:` | `org.h2.Driver` |
-| PostgreSQL | `jdbc:postgresql:` | `org.postgresql.Driver` |
-| MySQL | `jdbc:mysql:` | `com.mysql.jdbc.Driver` |
-| MariaDB | `jdbc:mariadb:` | `org.mariadb.jdbc.Driver` |
-| SQL Server | `jdbc:sqlserver:` | `com.microsoft.sqlserver.jdbc.SQLServerDriver` |
-| Oracle | `jdbc:oracle:` | `oracle.jdbc.OracleDriver` |
-| Derby | `jdbc:derby:` | `org.apache.derby.jdbc.EmbeddedDriver` |
-| HSQLDB | `jdbc:hsqldb:` | `org.hsqldb.jdbc.JDBCDriver` |
-| SQLite | `jdbc:sqlite:` | `org.sqlite.JDBC` |
-| DB2 | `jdbc:db2:` | `com.ibm.db2.jcc.DB2Driver` |
+| Database   | URL Prefix         | Auto-detected Driver                           |
+|------------|--------------------|------------------------------------------------|
+| H2         | `jdbc:h2:`         | `org.h2.Driver`                                |
+| PostgreSQL | `jdbc:postgresql:` | `org.postgresql.Driver`                        |
+| MySQL      | `jdbc:mysql:`      | `com.mysql.jdbc.Driver`                        |
+| MariaDB    | `jdbc:mariadb:`    | `org.mariadb.jdbc.Driver`                      |
+| SQL Server | `jdbc:sqlserver:`  | `com.microsoft.sqlserver.jdbc.SQLServerDriver` |
+| Oracle     | `jdbc:oracle:`     | `oracle.jdbc.OracleDriver`                     |
+| Derby      | `jdbc:derby:`      | `org.apache.derby.jdbc.EmbeddedDriver`         |
+| HSQLDB     | `jdbc:hsqldb:`     | `org.hsqldb.jdbc.JDBCDriver`                   |
+| SQLite     | `jdbc:sqlite:`     | `org.sqlite.JDBC`                              |
+| DB2        | `jdbc:db2:`        | `com.ibm.db2.jcc.DB2Driver`                    |
 
 ## More Examples
 

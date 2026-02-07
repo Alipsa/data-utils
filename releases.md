@@ -2,7 +2,13 @@
 
 ### 2.0.5, 2026-02-07
 - Allow asJson to include the actual password value when maskPassword is false (was previously always masking the password)
-- 
+- Fix `ConnectionInfo` equality/hash/compare behaviour for unnamed connections and correct password masking for multiline passwords
+- Improve runtime safety: null/case-insensitive database URL handling, invalid date-range validation, and corrected `LONGVARCHAR` JDBC mapping
+- Release/build quality updates: `release.sh` now fails on dirty git state, main classes are `@CompileStatic`, and CodeNarc baseline was tightened (priority 3 violations now 0)
+- Add regression tests for the above fixes
+- Upgrade dependencies:
+  - Groovy [5.0.3 -> 5.0.4]
+
 ### 2.0.4, 2026-01-20
 - Upgrade dependencies
   - Groovy [5.0.1 -> 5.0.3]
